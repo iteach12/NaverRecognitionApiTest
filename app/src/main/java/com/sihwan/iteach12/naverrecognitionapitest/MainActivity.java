@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
 
-    private TextView txtResult;
     private Button btnStart;
+    private TextView txtResult;
     private String mResult;
 
     private AudioWriterPCM writer;

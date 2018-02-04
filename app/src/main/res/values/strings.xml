@@ -4,7 +4,7 @@
     <string name="str_start">음성인식 시작</string>
     <string name="str_stop">음성인식 종료</string>
 
-    <string name="str_speeach_sysn">합성 시작</string>
+    <string name="str_speeach_sysn">합성 시작gg</string>
     <string name="str_speeach_play">합성음성 재생</string>
     <string name="str_speeah_text_hint">합성할 문자를 입력해주세요</string>
     <string name="title_activity_main2">Main2Activity</string>
