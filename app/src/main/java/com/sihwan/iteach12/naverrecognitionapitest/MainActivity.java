@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     EditText myText;
     Button play_mp3;
     SeekBar seekBar;
+
     //php에 접속한 결과를 가져온 스트링
     String result_from_php;
 

@@ -13,4 +13,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
+
+    <string name ="main_btn_game_string">게임하기</string>
+    <string name ="main_btn_myinfo_string">강의실</string>
+    <string name ="main_btn_rangking_string">랭킹확인</string>
+    <string name ="main_btn_study_string">학습하기</string>
 </resources>

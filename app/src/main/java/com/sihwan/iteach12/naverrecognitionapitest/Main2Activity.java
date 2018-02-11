@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 public class Main2Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
@@ -111,5 +111,24 @@ public class Main2Activity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.main_btn_study:
+
+                break;
+            case R.id.main_btn_game:
+                break;
+            case R.id.main_btn_myinfo:
+                break;
+            case R.id.main_btn_rangking:
+                break;
+
+
+        }
     }
 }

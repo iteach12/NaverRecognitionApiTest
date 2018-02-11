@@ -8,4 +8,61 @@
     tools:context="com.sihwan.iteach12.naverrecognitionapitest.Main2Activity"
     tools:showIn="@layout/app_bar_main2">
 
+    <Button
+        android:id="@+id/main_btn_study"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/main_btn_study_string"
+        app:layout_constraintBottom_toTopOf="@+id/main_btn_myinfo"
+        app:layout_constraintEnd_toStartOf="@+id/main_btn_game"
+        app:layout_constraintHorizontal_bias="0.769"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.748"
+        />
+
+    <Button
+        android:id="@+id/main_btn_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="88dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/main_btn_game_string"
+        app:layout_constraintBottom_toTopOf="@+id/main_btn_rangking"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.748"
+
+        />
+
+    <Button
+        android:id="@+id/main_btn_myinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="188dp"
+        android:layout_marginStart="88dp"
+        android:text="@string/main_btn_myinfo_string"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <Button
+        android:id="@+id/main_btn_rangking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="188dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/main_btn_rangking_string"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintStart_toEndOf="@+id/main_btn_myinfo"
+        />
+
 </android.support.constraint.ConstraintLayout>
