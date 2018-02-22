@@ -30,14 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     private RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
-
     private Button btnStart;
     private TextView txtResult;
     private String mResult;
-
     private AudioWriterPCM writer;
-
-
 
 
     //음성합성 관련
@@ -52,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
     //php에 접속한 결과를 가져온 스트링
     String result_from_php;
-
 
 
     //contentValues관련 변수들
@@ -204,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
                 user_text=myText.getText().toString();
 
-                NetworkTask networkTask = new NetworkTask(url, setContentsValues(user_name, user_text, user_voice, user_speed));
+                SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(user_name, user_text, user_voice, user_speed));
                 networkTask.execute();
                 Log.i("Result", setContentsValues(user_name, user_text, user_voice, user_speed).toString());
 
@@ -284,36 +279,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     //////////////////음성 합성 관련 /////////////////////
-    public class NetworkTask extends AsyncTask<Void, Void, String> {
-
-        private String url;
-        private ContentValues values;
-
-        public NetworkTask(String url, ContentValues values) {
-
-            this.url = url;
-            this.values = values;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-
-            String result; // 요청 결과를 저장할 변수.
-            RequestHttpUrlConnection requestHttpURLConnection = new RequestHttpUrlConnection();
-            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
-
-            Log.i("Result of PHP", s);
-        }
-    }
+//    public class NetworkTask extends AsyncTask<Void, Void, String> {
+//
+//        private String url;
+//        private ContentValues values;
+//
+//        public NetworkTask(String url, ContentValues values) {
+//
+//            this.url = url;
+//            this.values = values;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Void... params) {
+//
+//            String result; // 요청 결과를 저장할 변수.
+//            RequestHttpUrlConnection requestHttpURLConnection = new RequestHttpUrlConnection();
+//            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
+//
+//            return result;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
+//
+//            Log.i("Result of PHP", s);
+//        }
+//    }
 
 
     public ContentValues setContentsValues(String name, String my_text, String voice, int speed){
