@@ -2,7 +2,6 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.content.ContentValues;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -22,8 +21,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class BasicSysnActivity extends AppCompatActivity {
+    private static final String TAG = BasicSysnActivity.class.getSimpleName();
     private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
     // 1. "내 애플리케이션"에서 Client ID를 확인해서 이곳에 적어주세요.
     // 2. build.gradle (Module:app)에서 패키지명을 실제 개발자센터 애플리케이션 설정의 '안드로이드 앱 패키지 이름'으로 바꿔 주세요
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_basicsysn);
 
 
 
@@ -261,15 +260,15 @@ public class MainActivity extends AppCompatActivity {
 
     // Declare handler for handling SpeechRecognizer thread's Messages.
     static class RecognitionHandler extends Handler {
-        private final WeakReference<MainActivity> mActivity;
+        private final WeakReference<BasicSysnActivity> mActivity;
 
-        RecognitionHandler(MainActivity activity) {
+        RecognitionHandler(BasicSysnActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MainActivity activity = mActivity.get();
+            BasicSysnActivity activity = mActivity.get();
             if (activity != null) {
                 activity.handleMessage(msg);
             }

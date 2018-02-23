@@ -20,9 +20,9 @@ import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = BasicSysnActivity.class.getSimpleName();
     private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
-    private MainActivity.RecognitionHandler handler;
+    private BasicSysnActivity.RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
     private AudioWriterPCM writer;
     //음성합성 관련
@@ -56,7 +56,7 @@ public class Main2Activity extends AppCompatActivity
         studyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(Main2Activity.this, MainActivity.class);
+                Intent myIntent = new Intent(Main2Activity.this, BasicSysnActivity.class);
                 startActivity(myIntent);
             }
         });
