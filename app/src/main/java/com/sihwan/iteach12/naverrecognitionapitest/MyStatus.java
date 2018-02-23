@@ -1,5 +1,6 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -9,26 +10,27 @@ import java.util.ArrayList;
 public class MyStatus {
 
     String userId;
-    String userPassword;
     int userLevel;
+
+    ArrayList<Integer> userProgress;
     ArrayList<Integer> userItem;
     ArrayList<Integer> userWrongAnswer;
 
 
 
-    public MyStatus(String id, String passWord){
+    public MyStatus(String id){
             this.userId = id;
-            this.userPassword = passWord;
+
     }
 
     public String getUserId() {
         return userId;
     }
 
-
     public int getUserLevel() {
         return userLevel;
     }
+
 
     public void setUserLevel(int userLevel) {
         this.userLevel = userLevel;
@@ -48,5 +50,13 @@ public class MyStatus {
 
     public void setUserWrongAnswer(ArrayList<Integer> userWrongAnswer) {
         this.userWrongAnswer = userWrongAnswer;
+    }
+
+    public ArrayList<Integer> getUserProgress() {
+        return userProgress;
+    }
+
+    public void setUserProgress(ArrayList<Integer> userProgress) {
+        this.userProgress = userProgress;
     }
 }
