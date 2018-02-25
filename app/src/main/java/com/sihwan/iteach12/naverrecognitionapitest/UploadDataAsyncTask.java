@@ -14,11 +14,4 @@ public class UploadDataAsyncTask extends AsyncTask {
     protected Object doInBackground(Object[] objects) {
         return null;
     }
-
-
-    private void dev_merge_test(){
-
-        //머지 테스트 데브 브랜치에서 머지를 하면 어디로 가는가??
-    }
-
 }
