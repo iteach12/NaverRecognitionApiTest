@@ -24,4 +24,10 @@ public class UploadDataAsyncTask extends AsyncTask {
 
     private void dev_merge_test2222(){}
 
+    private void dev_derge_test3333(){
+
+        //로컬에서 바로 올릴 수 있는가???
+
+    }
+
 }
