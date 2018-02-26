@@ -467,6 +467,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
+
             }
         }
     }
