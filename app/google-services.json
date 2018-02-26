@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "682540481150",
+    "firebase_url": "https://munhaeryuk.firebaseio.com",
+    "project_id": "munhaeryuk",
+    "storage_bucket": "munhaeryuk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682540481150:android:e792d2dcfa99b9ab",
+        "android_client_info": {
+          "package_name": "com.sihwan.iteach12.naverrecognitionapitest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682540481150-jkbgm5cuujvl1827ubva1m1bek64vckd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sihwan.iteach12.naverrecognitionapitest",
+            "certificate_hash": "de25cb393241bceb7da07a4e00cde363a3f42545"
+          }
+        },
+        {
+          "client_id": "682540481150-3125i87447pvgs3g6puo8gi8ne41fl9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcsPJN-smPEtzbufDn05KISR6nGC2-Gko"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682540481150-3125i87447pvgs3g6puo8gi8ne41fl9d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "682540481150-t84jfarekpee956f99i5tflogkskpsbp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sihwan.iteach12.naverrecognitionapitest"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
