@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private SignInButton mGoogleSignInBtn;
-
+    private Button mEmailSignInButton;
 
     //파이어베이스 추가 변수
     private FirebaseAuth mAuth;
@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         //파이어베이스 이메일 로그인 버튼
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-
+            createUser(email, password);
 
 
 
@@ -410,6 +410,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+
+
+
+    //파이어베이스에서 추가한 것 RC_SIGN_IN의 값을 10으로 줌. 불러오는 코드임.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -428,6 +432,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    //파이어베이스 추가
+    //구글 로그인 관련
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -455,6 +461,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 });
     }
+
+    private void createUser(String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(LoginActivity.this, "email login success.",
+                                    Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                            //FirebaseUser user = mAuth.getCurrentUser();
+                            //updateUI(user);
+
+
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+
+    }
+
 
 }
 
