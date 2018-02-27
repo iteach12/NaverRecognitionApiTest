@@ -140,6 +140,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Intent myIntent = new Intent(LoginActivity.this, Main2Activity.class);
+                    startActivity(myIntent);
+                    finish();
+
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

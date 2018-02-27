@@ -14,7 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 public class Main2Activity extends AppCompatActivity
@@ -32,8 +35,9 @@ public class Main2Activity extends AppCompatActivity
 
     FloatingActionButton fab;
     Button studyBtn;
-
-
+    private TextView nameTextView;
+    private TextView emailTextView;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,8 @@ public class Main2Activity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //파이어베이스 사용자 관련해서 사용하기 위해 만들어주는것.
+        auth = FirebaseAuth.getInstance();
 
         fab = (FloatingActionButton)findViewById(R.id.ai_action);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +76,14 @@ public class Main2Activity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View view = navigationView.getHeaderView(0);
+        nameTextView = (TextView)view.findViewById(R.id.header_name_textView);
+        emailTextView = (TextView)view.findViewById(R.id.header_email_textView);
+
+        nameTextView.setText(auth.getCurrentUser().getDisplayName());
+        emailTextView.setText(auth.getCurrentUser().getEmail());
+
     }
 
     @Override
@@ -123,6 +137,14 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.nav_logout){
+            auth.signOut();
+            LoginManager.getInstance().logOut();
+            finish();
+            Intent myIntent = new Intent(Main2Activity.this, LoginActivity.class);
+            startActivity(myIntent);
+
 
         }
 
