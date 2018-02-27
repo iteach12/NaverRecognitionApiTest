@@ -36,6 +36,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -93,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     //파이어베이스 추가 변수
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
 
     //페이스북 추가
@@ -130,6 +132,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 
         mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
         //파이어베이스 구글 로그인 인증
 
         //파이어베이스 구글 로그인 버튼
@@ -503,7 +520,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     //email 직접 로그인 관련 만든 코드임
-    private void createUser(String email, String password){
+    private void createUser(final String email, final String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -525,11 +542,59 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
+
+                            loginUser(email, password);
                         }
 
                         // ...
                     }
                 });
+
+    }
+
+    private void loginUser(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                // Name, email address, and profile photo Url
+                                String name = user.getDisplayName();
+                                String email = user.getEmail();
+                                Uri photoUrl = user.getPhotoUrl();
+
+                                // The user's ID, unique to the Firebase project. Do NOT use this value to
+                                // authenticate with your backend server, if you have one. Use
+                                // FirebaseUser.getToken() instead.
+                                String uid = user.getUid();
+
+                                Intent myintent = new Intent(LoginActivity.this, Main2Activity.class);
+
+
+                            }
+
+
+
+
+
+
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+
 
     }
 
@@ -567,5 +632,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 });
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
 }
 
