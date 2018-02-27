@@ -1,7 +1,13 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -17,14 +23,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
-public class Main2Activity extends AppCompatActivity
+import java.io.File;
+
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static final String TAG = BasicSysnActivity.class.getSimpleName();
     private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
+    private static final int GARRLERY_CODE = 20;
     private BasicSysnActivity.RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
     private AudioWriterPCM writer;
@@ -38,16 +52,26 @@ public class Main2Activity extends AppCompatActivity
     private TextView nameTextView;
     private TextView emailTextView;
     private FirebaseAuth auth;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //파이어베이스 사용자 관련해서 사용하기 위해 만들어주는것.
         auth = FirebaseAuth.getInstance();
+
+        //파이어베이스 파일 스토리지 사용관련
+        storage = FirebaseStorage.getInstance();
+
+        //파일 업로드 때문에 권한주기 (파일 경로 때무임)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+        }
+
 
         fab = (FloatingActionButton)findViewById(R.id.ai_action);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +86,7 @@ public class Main2Activity extends AppCompatActivity
         studyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(Main2Activity.this, BasicSysnActivity.class);
+                Intent myIntent = new Intent(HomeActivity.this, BasicSysnActivity.class);
                 startActivity(myIntent);
             }
         });
@@ -99,7 +123,7 @@ public class Main2Activity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main2, menu);
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
@@ -130,6 +154,12 @@ public class Main2Activity extends AppCompatActivity
 
         } else if (id == R.id.nav_gallery) {
 
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+
+            startActivityForResult(intent, GARRLERY_CODE);
+
+
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -142,7 +172,7 @@ public class Main2Activity extends AppCompatActivity
             auth.signOut();
             LoginManager.getInstance().logOut();
             finish();
-            Intent myIntent = new Intent(Main2Activity.this, LoginActivity.class);
+            Intent myIntent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(myIntent);
 
 
@@ -171,4 +201,50 @@ public class Main2Activity extends AppCompatActivity
 
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == GARRLERY_CODE){
+
+
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://munhaeryuk.appspot.com/");
+            Uri file = Uri.fromFile(new File(getPath(data.getData())));
+            StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(file);
+
+// Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                }
+            });
+
+        }
+
+
+    }
+
+    public String getPath(Uri uri){
+        String [] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(this, uri,proj, null,null,null);
+
+        Cursor cursor = cursorLoader.loadInBackground();
+        int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(index);
+
+
+    }
+
+
 }

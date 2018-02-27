@@ -36,7 +36,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -140,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent myIntent = new Intent(LoginActivity.this, Main2Activity.class);
+                    Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(myIntent);
                     finish();
 
@@ -577,7 +576,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 // FirebaseUser.getToken() instead.
                                 String uid = user.getUid();
 
-                                Intent myintent = new Intent(LoginActivity.this, Main2Activity.class);
+                                Intent myintent = new Intent(LoginActivity.this, HomeActivity.class);
 
 
                             }
