@@ -274,7 +274,7 @@ public class HomeActivity extends AppCompatActivity
         StorageReference storageRef = storage.getReferenceFromUrl("gs://munhaeryuk.appspot.com/");
 
 
-        Uri file = Uri.fromFile(new File(uri));
+        final Uri file = Uri.fromFile(new File(uri));
         StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
         UploadTask uploadTask = riversRef.putFile(file);
 
@@ -296,7 +296,7 @@ public class HomeActivity extends AppCompatActivity
                 imageDTO.description = description.getText().toString();
                 imageDTO.uid = auth.getCurrentUser().getUid();
                 imageDTO.userId = auth.getCurrentUser().getEmail();
-
+                imageDTO.imageName = file.getLastPathSegment();
                 database.getReference().child("images").push().setValue(imageDTO);
 
 

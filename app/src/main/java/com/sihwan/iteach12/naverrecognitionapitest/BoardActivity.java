@@ -2,6 +2,7 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 
 
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,8 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-
+import com.google.firebase.storage.FirebaseStorage;
 
 
 import java.util.ArrayList;
@@ -35,8 +39,9 @@ public class BoardActivity extends AppCompatActivity {
     private List<ImageDTO> imageDTOs = new ArrayList<>();
     private List<String> uidLists = new ArrayList<>();
     private FirebaseDatabase database;
-    private BoardRecyclerViewAdapter boardRecyclerViewAdapter;
     private FirebaseAuth auth;
+    private FirebaseStorage storage;
+    private BoardRecyclerViewAdapter boardRecyclerViewAdapter;
 
 
 
@@ -47,6 +52,7 @@ public class BoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_board);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
 
         recyclerView = (RecyclerView)findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -119,6 +125,16 @@ public class BoardActivity extends AppCompatActivity {
             }
 
 
+
+            ((CustomViewHolder)holder).deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    delete_content(position);
+                }
+            });
+
+
+
         }
 
         @Override
@@ -157,6 +173,26 @@ public class BoardActivity extends AppCompatActivity {
         }
 
 
+        private void delete_content(int position){
+
+            storage.getReference().child("images").child(imageDTOs.get(position).imageName).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    Toast.makeText(getApplicationContext(), "삭제완료", Toast.LENGTH_SHORT).show();
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "삭제실패", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        }
+
+
 
 
     }
@@ -167,6 +203,7 @@ public class BoardActivity extends AppCompatActivity {
         TextView textView1;
         TextView textView2;
         ImageView starButton;
+        ImageView deleteButton;
 
 
         public CustomViewHolder(View itemView) {
@@ -176,6 +213,7 @@ public class BoardActivity extends AppCompatActivity {
             textView1 = (TextView)itemView.findViewById(R.id.item_textView1);
             textView2 = (TextView)itemView.findViewById(R.id.item_textView2);
             starButton = (ImageView)itemView.findViewById(R.id.item_starButton_imageView);
+            deleteButton = (ImageView)itemView.findViewById(R.id.item_deleteButton);
 
 
         }

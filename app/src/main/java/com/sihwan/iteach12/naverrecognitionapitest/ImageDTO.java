@@ -11,6 +11,7 @@ public class ImageDTO {
 
     public String imageUrl;
     public String title;
+    public String imageName;
     public String description;
     public String uid;
     public String userId;
