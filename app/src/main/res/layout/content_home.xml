@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.sihwan.iteach12.naverrecognitionapitest.Main2Activity"
+    tools:context="com.sihwan.iteach12.naverrecognitionapitest.HomeActivity"
     tools:layout_editor_absoluteY="81dp"
-    tools:showIn="@layout/app_bar_main2">
+    tools:showIn="@layout/app_bar_home">
 
     <Button
         android:id="@+id/main_btn_study"
