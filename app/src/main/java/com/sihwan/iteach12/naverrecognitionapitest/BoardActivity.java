@@ -173,13 +173,32 @@ public class BoardActivity extends AppCompatActivity {
         }
 
 
-        private void delete_content(int position){
+        private void delete_content(final int position){
+
+
+            /*
+            * 콜백 방식으로? 스토리지와 데이터베이스가 순차적으로 삭제되게 하면 통신상의 문제나 기타 오류로 인해 꼬일 수 있지
+            * 예를 들면 스토리지는 삭제되었는데 뭔가 끊기면서 데이터베이스는 남아있게 된다면 데이터가 지저분해 진다
+            * 따라서 이상없이 스토리지가 삭제되었을 때에 데이터베이스가 삭제되도록 안에 넣어버렸음
+            * 스토리지가 먼저 삭제 그리고 데이터베이스 자료가 나중에 삭제.
+            * */
 
             storage.getReference().child("images").child(imageDTOs.get(position).imageName).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    Toast.makeText(getApplicationContext(), "삭제완료", Toast.LENGTH_SHORT).show();
+                    //setValue(null) == removeValue() 둘다 똑같은 기능
+                    database.getReference().child("images").child(uidLists.get(position)).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getApplicationContext(), "삭제완료", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "삭제실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -188,6 +207,10 @@ public class BoardActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "삭제실패", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
+
+
 
 
         }
