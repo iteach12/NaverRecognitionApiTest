@@ -1,17 +1,14 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
 
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +26,6 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +40,6 @@ public class BoardActivity extends AppCompatActivity {
     private BoardRecyclerViewAdapter boardRecyclerViewAdapter;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +48,7 @@ public class BoardActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
 
-        recyclerView = (RecyclerView)findViewById(R.id.recycleView);
+        recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         boardRecyclerViewAdapter = new BoardRecyclerViewAdapter();
         recyclerView.setAdapter(boardRecyclerViewAdapter);
@@ -64,12 +58,11 @@ public class BoardActivity extends AppCompatActivity {
 
                 imageDTOs.clear();
                 uidLists.clear();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ImageDTO imageDTO = snapshot.getValue(ImageDTO.class);
                     String uidKey = snapshot.getKey();
                     imageDTOs.add(imageDTO);
                     uidLists.add(uidKey);
-
 
 
                 }
@@ -87,16 +80,13 @@ public class BoardActivity extends AppCompatActivity {
     }
 
 
-    class BoardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
-
-
+    class BoardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_board,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_board, parent, false);
 
 
             return new CustomViewHolder(view);
@@ -105,34 +95,32 @@ public class BoardActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-            ((CustomViewHolder)holder).textView1.setText(imageDTOs.get(position).title);
-            ((CustomViewHolder)holder).textView2.setText(imageDTOs.get(position).description);
+            ((CustomViewHolder) holder).textView1.setText(imageDTOs.get(position).title);
+            ((CustomViewHolder) holder).textView2.setText(imageDTOs.get(position).description);
 
-            Glide.with(holder.itemView.getContext()).load(imageDTOs.get(position).imageUrl).into(((CustomViewHolder)holder).imageView);
+            Glide.with(holder.itemView.getContext()).load(imageDTOs.get(position).imageUrl).into(((CustomViewHolder) holder).imageView);
 
-            ((CustomViewHolder)holder).starButton.setOnClickListener(new View.OnClickListener() {
+            ((CustomViewHolder) holder).starButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onStarClicked(database.getReference().child("images").child(uidLists.get(position)));
                 }
             });
 
-            if(imageDTOs.get(position).stars.containsKey(auth.getCurrentUser().getUid())){
-                ((CustomViewHolder)holder).starButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+            if (imageDTOs.get(position).stars.containsKey(auth.getCurrentUser().getUid())) {
+                ((CustomViewHolder) holder).starButton.setImageResource(R.drawable.ic_favorite_black_24dp);
 
-            }else {
-                ((CustomViewHolder)holder).starButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            } else {
+                ((CustomViewHolder) holder).starButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
 
 
-
-            ((CustomViewHolder)holder).deleteButton.setOnClickListener(new View.OnClickListener() {
+            ((CustomViewHolder) holder).deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     delete_content(position);
                 }
             });
-
 
 
         }
@@ -142,7 +130,7 @@ public class BoardActivity extends AppCompatActivity {
             return imageDTOs.size();
         }
 
-        private void onStarClicked(DatabaseReference postRef){
+        private void onStarClicked(DatabaseReference postRef) {
 
             postRef.runTransaction(new Transaction.Handler() {
                 @Override
@@ -151,7 +139,7 @@ public class BoardActivity extends AppCompatActivity {
                     if (imageDTO == null) {
                         mutableData.setValue(imageDTO);
                     }
-                    if(imageDTO.stars.containsKey(auth.getCurrentUser().getUid())) {
+                    if (imageDTO.stars.containsKey(auth.getCurrentUser().getUid())) {
 
                         imageDTO.starCount = imageDTO.starCount - 1;
                         imageDTO.stars.remove(auth.getCurrentUser().getUid());
@@ -173,7 +161,7 @@ public class BoardActivity extends AppCompatActivity {
         }
 
 
-        private void delete_content(final int position){
+        private void delete_content(final int position) {
 
 
             /*
@@ -209,18 +197,12 @@ public class BoardActivity extends AppCompatActivity {
             });
 
 
-
-
-
-
         }
-
-
 
 
     }
 
-    private class CustomViewHolder extends RecyclerView.ViewHolder{
+    private class CustomViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
         TextView textView1;
@@ -232,17 +214,14 @@ public class BoardActivity extends AppCompatActivity {
         public CustomViewHolder(View itemView) {
             super(itemView);
 
-            imageView = (ImageView)itemView.findViewById(R.id.item_imageView);
-            textView1 = (TextView)itemView.findViewById(R.id.item_textView1);
-            textView2 = (TextView)itemView.findViewById(R.id.item_textView2);
-            starButton = (ImageView)itemView.findViewById(R.id.item_starButton_imageView);
-            deleteButton = (ImageView)itemView.findViewById(R.id.item_deleteButton);
-
+            imageView = (ImageView) itemView.findViewById(R.id.item_imageView);
+            textView1 = (TextView) itemView.findViewById(R.id.item_textView1);
+            textView2 = (TextView) itemView.findViewById(R.id.item_textView2);
+            starButton = (ImageView) itemView.findViewById(R.id.item_starButton_imageView);
+            deleteButton = (ImageView) itemView.findViewById(R.id.item_deleteButton);
 
         }
     }
-
-
 
 
 }
