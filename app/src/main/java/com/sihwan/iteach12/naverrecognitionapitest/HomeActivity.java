@@ -100,7 +100,6 @@ public class HomeActivity extends AppCompatActivity
 
                 upload(imagePath);
 
-
             }
         });
 
@@ -200,7 +199,13 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
+
+
         } else if (id == R.id.nav_manage) {
+
+            Intent intent = new Intent(HomeActivity.this, MyDataActivity.class);
+            startActivity(intent);
+
 
         } else if (id == R.id.nav_share) {
 

@@ -26,7 +26,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
@@ -60,7 +60,11 @@
         </activity>
         <!-- 페이스북 관련 -->
 
-        <activity android:name=".BoardActivity"></activity>
+        <activity android:name=".BoardActivity" />
+        <activity
+            android:name=".MyDataActivity"
+            android:label="@string/title_activity_my_data"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

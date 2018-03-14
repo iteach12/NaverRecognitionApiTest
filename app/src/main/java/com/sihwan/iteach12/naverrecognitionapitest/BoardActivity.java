@@ -51,7 +51,10 @@ public class BoardActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         boardRecyclerViewAdapter = new BoardRecyclerViewAdapter();
+
         recyclerView.setAdapter(boardRecyclerViewAdapter);
+
+        
         database.getReference().child("images").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
