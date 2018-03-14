@@ -24,12 +24,15 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.naver.speech.clientapi.SpeechRecognitionResult;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyDataActivity extends AppCompatActivity {
@@ -49,11 +52,15 @@ public class MyDataActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private FirebaseAuth auth;
+
+
+    private static ArrayList<String> testString;
+    private static boolean finalAnswer;
 
 
 
-
-    private static final String TAG = BasicSysnActivity.class.getSimpleName();
+    private static final String TAG = MyDataActivity.class.getSimpleName();
     private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
     // 1. "내 애플리케이션"에서 Client ID를 확인해서 이곳에 적어주세요.
     // 2. build.gradle (Module:app)에서 패키지명을 실제 개발자센터 애플리케이션 설정의 '안드로이드 앱 패키지 이름'으로 바꿔 주세요
@@ -112,6 +119,14 @@ public class MyDataActivity extends AppCompatActivity {
                     strBuf.append("\n");
                 }
                 mResult = strBuf.toString();
+
+                if (mResult.contains(testString.get(mViewPager.getCurrentItem()))){
+
+                    Toast.makeText(getApplicationContext(), "정답", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "틀렸다 자식아", Toast.LENGTH_SHORT).show();
+                }
+
 //              txtResult.setText(mResult);
                 break;
 
@@ -144,6 +159,24 @@ public class MyDataActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //firebase인증용
+        auth = FirebaseAuth.getInstance();
+        user_name = auth.getCurrentUser().getUid();
+
+        testString = new ArrayList<>();
+        testString.add("가구");
+        testString.add("나노");
+        testString.add("다두");
+        testString.add("라리");
+        testString.add("무모");
+        testString.add("부브");
+        testString.add("송사");
+        testString.add("자조");
+        testString.add("차채");
+        testString.add("크코");
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -156,8 +189,22 @@ public class MyDataActivity extends AppCompatActivity {
         STT_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "말해보세요.", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+
+
+                Snackbar.make(view, "발음해보세요.", Snackbar.LENGTH_SHORT).addCallback(
+                        new Snackbar.Callback(){
+                            @Override
+                            public void onShown(Snackbar sb) {
+                                super.onShown(sb);
+                            }
+
+                            @Override
+                            public void onDismissed(Snackbar transientBottomBar, int event) {
+//                                super.onDismissed(transientBottomBar, event);
+                                transientBottomBar.show();
+                            }
+                        })
+                        ;
 
                 if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
                     // Start button is pushed when SpeechRecognizer's state is inactive.
@@ -206,7 +253,7 @@ public class MyDataActivity extends AppCompatActivity {
                                 MediaPlayer mediaPlayer = new MediaPlayer();
 
                                 try {
-                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/iteach12.mp3");
+                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+auth.getCurrentUser().getUid()+".mp3");
                                     mediaPlayer.prepare();
                                     mediaPlayer.start();
                                 } catch (IOException e) {
@@ -302,7 +349,10 @@ public class MyDataActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            textView.setText(testString.get(getArguments().getInt(ARG_SECTION_NUMBER)-1).toString());
             return rootView;
         }
     }

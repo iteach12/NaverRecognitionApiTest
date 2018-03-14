@@ -35,6 +35,9 @@
     <!--페이스북 관련-->
     <string name="facebook_app_id">779662142234371</string>
     <string name="fb_login_protocol_scheme">fb779662142234371</string>
+    <!--페이스북 관련-->
+
+    <!--뷰페이저 관련-->
     <string name="title_activity_my_data">MyDataActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
