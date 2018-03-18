@@ -1,5 +1,6 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.media.MediaPlayer;
 import android.os.Environment;
@@ -7,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -35,7 +37,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyDataActivity extends AppCompatActivity {
+public class MyDataActivity extends AppCompatActivity implements View.OnClickListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -56,7 +58,7 @@ public class MyDataActivity extends AppCompatActivity {
 
 
     private static ArrayList<String> testString;
-    private static boolean finalAnswer;
+
 
 
 
@@ -114,20 +116,26 @@ public class MyDataActivity extends AppCompatActivity {
                 SpeechRecognitionResult speechRecognitionResult = (SpeechRecognitionResult) msg.obj;
                 List<String> results = speechRecognitionResult.getResults();
                 StringBuilder strBuf = new StringBuilder();
+                Boolean finalAnswer=false;
+
                 for(String result : results) {
                     strBuf.append(result);
                     strBuf.append("\n");
+                    if(result.contains(testString.get(mViewPager.getCurrentItem()))){
+                        Log.i("Answer", "correct");
+
+                        //정답일 때
+                        user_text=result;
+                        finalAnswer=true;
+                    }
                 }
                 mResult = strBuf.toString();
 
-                if (mResult.contains(testString.get(mViewPager.getCurrentItem()))){
+                checkTheAnswer(finalAnswer);
 
-                    Toast.makeText(getApplicationContext(), "정답", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getApplicationContext(), "틀렸다 자식아", Toast.LENGTH_SHORT).show();
-                }
 
-//              txtResult.setText(mResult);
+
+
                 break;
 
             case R.id.recognitionError:
@@ -149,6 +157,24 @@ public class MyDataActivity extends AppCompatActivity {
 //                btnStart.setText(R.string.str_start);
                 STT_btn.setEnabled(true);
                 break;
+        }
+    }
+
+    private void checkTheAnswer(Boolean answer) {
+
+        if(answer){
+            Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
+
+        }else{
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
+            builder.setTitle("아쉽네요. 다시 도전해 보세요 ^^");
+            builder.setMessage("이렇게 발음하셨어요"+"\n"+user_text);
+            builder.setPositiveButton("확인", null);
+            builder.create().show();
+
+
+
         }
     }
 
@@ -186,88 +212,16 @@ public class MyDataActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         STT_btn = findViewById(R.id.fab);
-        STT_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        STT_btn.setOnClickListener(this);
 
 
-                Snackbar.make(view, "발음해보세요.", Snackbar.LENGTH_SHORT).addCallback(
-                        new Snackbar.Callback(){
-                            @Override
-                            public void onShown(Snackbar sb) {
-                                super.onShown(sb);
-                            }
-
-                            @Override
-                            public void onDismissed(Snackbar transientBottomBar, int event) {
-//                                super.onDismissed(transientBottomBar, event);
-                                transientBottomBar.show();
-                            }
-                        })
-                        ;
-
-                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
-                    // Start button is pushed when SpeechRecognizer's state is inactive.
-                    // Run SpeechRecongizer by calling recognize().
-                    mResult = "";
-
-                    naverRecognizer.recognize();
-                } else {
-                    Log.d(TAG, "stop and wait Final Result");
-                    STT_btn.setEnabled(false);
-                    naverRecognizer.getSpeechRecognizer().stop();
-                }
-
-
-
-
-
-
-            }
-        });
 
 
         TTS_btn = (FloatingActionButton) findViewById(R.id.fab2);
-        TTS_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                url = "http://lovepusa.cafe24.com/naverapi.php";
-
-                // AsyncTask를 통해 HttpURLConnection 수행.
-
-                user_text=mResult;
-
-
-                SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(user_name, user_text, user_voice, user_speed));
-                networkTask.execute();
-                Log.i("Result", setContentsValues(user_name, user_text, user_voice, user_speed).toString());
+        TTS_btn.setOnClickListener(this);
 
 
 
-                Snackbar.make(view, "문제읽기", Snackbar.LENGTH_SHORT)
-                        .setAction("재생", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                MediaPlayer mediaPlayer = new MediaPlayer();
-
-                                try {
-                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+auth.getCurrentUser().getUid()+".mp3");
-                                    mediaPlayer.prepare();
-                                    mediaPlayer.start();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }).show();
-
-
-
-
-            }
-        });
 
         handler = new RecognitionHandler(MyDataActivity.this);
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
@@ -317,6 +271,70 @@ public class MyDataActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            case R.id.fab:
+                //음성인식하기 버튼 누르면
+                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
+                    // Start button is pushed when SpeechRecognizer's state is inactive.
+                    // Run SpeechRecongizer by calling recognize().
+                    mResult = "";
+
+                    naverRecognizer.recognize();
+                } else {
+                    Log.d(TAG, "stop and wait Final Result");
+                    STT_btn.setEnabled(false);
+                    naverRecognizer.getSpeechRecognizer().stop();
+                }
+
+                break;
+            case R.id.fab2:
+
+                url = "http://lovepusa.cafe24.com/naverapi.php";
+
+                // AsyncTask를 통해 HttpURLConnection 수행.
+
+
+
+
+                SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(user_name, user_text, user_voice, user_speed));
+                networkTask.execute();
+                Log.i("Result", setContentsValues(user_name, user_text, user_voice, user_speed).toString());
+
+
+
+                Snackbar.make(view, "문제읽기", Snackbar.LENGTH_SHORT)
+                        .setAction("재생", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                MediaPlayer mediaPlayer = new MediaPlayer();
+
+                                try {
+                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+auth.getCurrentUser().getUid()+".mp3");
+                                    mediaPlayer.prepare();
+                                    mediaPlayer.start();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }).show();
+
+
+
+
+
+                break;
+
+
+        }
+
+
     }
 
     /**
