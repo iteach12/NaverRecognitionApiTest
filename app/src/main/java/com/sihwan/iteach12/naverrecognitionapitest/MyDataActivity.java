@@ -88,6 +88,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     FloatingActionButton STT_btn;
 
 
+
+    //데이터베이스 불러오자.
+
+
+
     private void handleMessage(Message msg) {
         switch (msg.what) {
             case R.id.clientReady:
@@ -190,6 +195,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         auth = FirebaseAuth.getInstance();
         user_name = auth.getCurrentUser().getUid();
 
+
+        //문제 데이터베이스 작성과정
         testString = new ArrayList<>();
         testString.add("가구");
         testString.add("나노");
@@ -201,6 +208,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         testString.add("자조");
         testString.add("차채");
         testString.add("크코");
+        //위의 리스트를 데이터베이스로 바꿔보자 아래로
+//        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Problem.db", null, 1);
+        //먼저 데이터베이스 헬퍼 불러오자(관리클래스)
+//        dbHelper.getResult();
+
+
+
+
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -370,6 +385,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
+            //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
             textView.setText(testString.get(getArguments().getInt(ARG_SECTION_NUMBER)-1).toString());
             return rootView;
         }
