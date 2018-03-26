@@ -10,7 +10,7 @@ import java.util.Map;
 public class MyStatusDTO {
 
     public int userLevel;
-    public Map<Integer, Boolean> userProgress = new HashMap<>();
-    public Map<Integer, Boolean> userWrongAnswer = new HashMap<>();
-    public Map<Integer, Boolean> userItem = new HashMap<>();
+    public Map<String, Boolean> userProgress = new HashMap<>();
+    public Map<String, Boolean> userWrongAnswer = new HashMap<>();
+    public Map<String, Boolean> userItem = new HashMap<>();
 }
