@@ -2,6 +2,7 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
@@ -29,13 +30,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.naver.speech.clientapi.SpeechRecognitionResult;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyDataActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -56,8 +66,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private FirebaseAuth auth;
 
+    private DatabaseReference database;
 
-    private static ArrayList<String> testString;
+    private static ArrayList<String> testString2;
 
 
 
@@ -126,7 +137,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 for(String result : results) {
                     strBuf.append(result);
                     strBuf.append("\n");
-                    if(result.contains(testString.get(mViewPager.getCurrentItem()))){
+                    if(result.contains(testString2.get(mViewPager.getCurrentItem()))){
                         Log.i("Answer", "correct");
 
                         //정답일 때
@@ -193,38 +204,88 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         //firebase인증용
         auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance().getReference();
         user_name = auth.getCurrentUser().getUid();
 
 
         //문제 데이터베이스 작성과정
-        testString = new ArrayList<>();
-        testString.add("가구");
-        testString.add("나노");
-        testString.add("다두");
-        testString.add("라리");
-        testString.add("무모");
-        testString.add("부브");
-        testString.add("송사");
-        testString.add("자조");
-        testString.add("차채");
-        testString.add("크코");
-        //위의 리스트를 데이터베이스로 바꿔보자 아래로
-//        final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Problem.db", null, 1);
-        //먼저 데이터베이스 헬퍼 불러오자(관리클래스)
-//        dbHelper.getResult();
+
+        testString2= new ArrayList<>();
 
 
 
 
+
+        Query myProblemQuery = database.child("problemTest").
+                orderByChild("problemText");
+        myProblemQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+        myProblemQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+
+                    MyProblemDTO myProblemDTO = postSnapShot.getValue(MyProblemDTO.class);
+                    testString2.add(myProblemDTO.problemText);
+
+                }
+
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
+//                builder.setTitle("문제뽑은거");
+//                builder.setMessage(testString2.get(0).toString());
+//                builder.setPositiveButton("확인", null);
+//                builder.create().show();
+
+                //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+                // Set up the ViewPager with the sections adapter.
+                mViewPager = (ViewPager) findViewById(R.id.container);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+
 
         STT_btn = findViewById(R.id.fab);
         STT_btn.setOnClickListener(this);
@@ -386,7 +447,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
             //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
-            textView.setText(testString.get(getArguments().getInt(ARG_SECTION_NUMBER)-1).toString());
+            textView.setText(testString2.get(getArguments().getInt(ARG_SECTION_NUMBER)-1));
             return rootView;
         }
     }
@@ -412,7 +473,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         public int getCount() {
             // Show 3 total pages.
             // 여기있는 숫자를 바꾸면... 원하는 대로 페이지 수가 바뀐다.
-            return 10;
+            return testString2.size();
         }
     }
 

@@ -36,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -211,6 +212,9 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
+
+
+
         } else if (id == R.id.nav_send) {
 
         } else if (id == R.id.nav_logout){
@@ -309,14 +313,6 @@ public class HomeActivity extends AppCompatActivity
 
 
                 //Firebase database 업로드 테스트용
-                MyStatusDTO myStatusDTO = new MyStatusDTO();
-                myStatusDTO.userItem.put("abc", true);
-                myStatusDTO.userLevel = 100;
-                myStatusDTO.userProgress.put("def", true);
-                myStatusDTO.userWrongAnswer.put("ghi", false);
-                //HashMap은 정수값을 사용하지 못함?????
-                database.getReference().child("testData").push().setValue(myStatusDTO);
-                //Firebase database 업로드 테스트용. 일단은 성공함.
 
 
 

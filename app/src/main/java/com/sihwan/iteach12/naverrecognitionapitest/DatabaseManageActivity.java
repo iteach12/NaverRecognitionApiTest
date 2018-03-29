@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,8 @@ public class DatabaseManageActivity extends AppCompatActivity {
 
     private String userId;
     private FirebaseAuth auth;
+    private DatabaseReference database;
+
 
 
     @Override
@@ -26,6 +30,7 @@ public class DatabaseManageActivity extends AppCompatActivity {
 
 
         auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance().getReference();
         userId = auth.getCurrentUser().getEmail().toString();
 
 
@@ -85,13 +90,26 @@ public class DatabaseManageActivity extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                result.setText(dbHelper.getResult());
+//                result.setText(dbHelper.getResult());
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(DatabaseManageActivity.this);
+//                builder.setTitle("문제뽑은거");
+//                builder.setMessage(dbHelper.getResult());
+//                builder.setPositiveButton("확인", null);
+//                builder.create().show();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(DatabaseManageActivity.this);
-                builder.setTitle("문제뽑은거");
-                builder.setMessage(dbHelper.getResult());
-                builder.setPositiveButton("확인", null);
-                builder.create().show();
+
+                MyProblemDTO myProblemDTO = new MyProblemDTO();
+                myProblemDTO.problemLevel = Integer.parseInt(etPrice.getText().toString());
+                myProblemDTO.problemText = etItem.getText().toString();
+
+
+                //HashMap은 정수값을 사용하지 못함?????
+                database.child("problemTest").push().setValue(myProblemDTO);
+                //Firebase database 업로드 테스트용. 일단은 성공함.
+
+
+
             }
         });
     }
