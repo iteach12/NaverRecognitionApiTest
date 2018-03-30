@@ -46,8 +46,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
-public class MyDataActivity extends AppCompatActivity implements View.OnClickListener{
+public class MyDataActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -68,7 +69,20 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private DatabaseReference database;
 
+    Query myProblemQuery;
+
     private static ArrayList<String> testString2;
+    private int PROBLEM_ONE_STR_1 = 1;
+    private int PROBLEM_ONE_STR_2 = 2;
+    private int PROBLEM_ONE_STR_3 = 3;
+    private int PROBLEM_ONE_STR_4 = 4;
+    private int PROBLEM_ONE_STR_5 = 5;
+    private int PROBLEM_ONE_STR_6 = 6;
+    private int PROBLEM_ONE_STR_7 = 7;
+    private int PROBLEM_ONE_STR_RANDOM = 0;
+
+
+
 
 
 
@@ -213,11 +227,12 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         testString2= new ArrayList<>();
 
 
-
-
-
-        Query myProblemQuery = database.child("problemTest").
+        //문제 뽑아내기.
+        myProblemQuery = database.child("problemTest").
                 orderByChild("problemText");
+
+        //addChileEventListener은 데이터베이스에 추가가될 때 사용 일단 지금은 쓸일이 없지? 아닌가 새로운 아이템 나올때?
+        //아니면 새로운 랭킹이 생겼을 때? 아니면 새로운 아이템 있을 때?
         myProblemQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -246,39 +261,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-
-
-
-
-        myProblemQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-
-                    MyProblemDTO myProblemDTO = postSnapShot.getValue(MyProblemDTO.class);
-                    testString2.add(myProblemDTO.problemText);
-
-                }
-
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
-//                builder.setTitle("문제뽑은거");
-//                builder.setMessage(testString2.get(0).toString());
-//                builder.setPositiveButton("확인", null);
-//                builder.create().show();
-
-                //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
-                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-                // Set up the ViewPager with the sections adapter.
-                mViewPager = (ViewPager) findViewById(R.id.container);
-                mViewPager.setAdapter(mSectionsPagerAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        //이게 핵심 ㅋㅋ 문제 가져오는 방법 implements해놨음
+        myProblemQuery.addValueEventListener(this);
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -289,10 +273,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         STT_btn = findViewById(R.id.fab);
         STT_btn.setOnClickListener(this);
-
-
-
-
         TTS_btn = (FloatingActionButton) findViewById(R.id.fab2);
         TTS_btn.setOnClickListener(this);
 
@@ -317,6 +297,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         super.onResume();
 
         mResult = "";
+        myProblemQuery = database.child("problemTest").
+                orderByChild("problemText");
     }
 
     @Override
@@ -410,6 +392,40 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
+
+    }
+
+
+
+
+    //ㅋㅋ 문제 뽑아오기. 랜덤 넣기 가능함.
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+
+            MyProblemDTO myProblemDTO = postSnapShot.getValue(MyProblemDTO.class);
+
+            Random levelRandom = new Random();
+            ;
+            if (myProblemDTO.problemLevel > levelRandom.nextInt(7)){
+                testString2.add(myProblemDTO.problemText);
+            }
+
+
+        }
+
+
+
+        //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
 
     }
 
