@@ -1,5 +1,7 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,8 +11,14 @@ import java.util.Map;
 
 public class MyStatusDTO {
 
+
+    public String userName;
+
     public int userLevel;
-    public Map<String, Boolean> userProgress = new HashMap<>();
-    public Map<String, Boolean> userWrongAnswer = new HashMap<>();
-    public Map<String, Boolean> userItem = new HashMap<>();
+
+    //내 아이템
+    public ArrayList<Map<String, Integer>> userItem = new ArrayList<>();
+
+
+
 }

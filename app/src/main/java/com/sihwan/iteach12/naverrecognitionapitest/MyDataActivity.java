@@ -1,12 +1,15 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -81,6 +84,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     private int PROBLEM_ONE_STR_7 = 7;
     private int PROBLEM_ONE_STR_RANDOM = 0;
 
+    private int currentPoint;
+    private int problemProgress;
+
 
 
 
@@ -103,7 +109,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     String url;
     //contentValues관련 변수들
     String user_name = "iteach12";
-    String user_text;
+    static String user_text;
     String user_voice = "mijin";
     int user_speed = 0;
     //음성합성 관련
@@ -157,6 +163,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                         //정답일 때
                         user_text=result;
                         finalAnswer=true;
+                    }else{
+                        user_text=result;
                     }
                 }
                 mResult = strBuf.toString();
@@ -190,22 +198,32 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+
     private void checkTheAnswer(Boolean answer) {
+
+
+
 
         if(answer){
             Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
 
+            Log.i("Answer", "Correct");
+
+            mViewPager.getChildAt(mViewPager.getCurrentItem()).setBackgroundColor(Color.GREEN);
+
+
+            currentPoint++;
+
         }else{
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
-            builder.setTitle("아쉽네요. 다시 도전해 보세요 ^^");
-            builder.setMessage("이렇게 발음하셨어요"+"\n"+user_text);
-            builder.setPositiveButton("확인", null);
-            builder.create().show();
-
-
+            mViewPager.getChildAt(mViewPager.getCurrentItem()).setBackgroundColor(Color.RED);
 
         }
+
+
+
+
+
     }
 
     @Override
@@ -218,8 +236,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         //firebase인증용
         auth = FirebaseAuth.getInstance();
+
         database = FirebaseDatabase.getInstance().getReference();
-        user_name = auth.getCurrentUser().getUid();
+        user_name = auth.getCurrentUser().getEmail().split("@")[0];
 
 
         //문제 데이터베이스 작성과정
@@ -265,19 +284,15 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         myProblemQuery.addValueEventListener(this);
 
 
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-
-
-
 
         STT_btn = findViewById(R.id.fab);
         STT_btn.setOnClickListener(this);
         TTS_btn = (FloatingActionButton) findViewById(R.id.fab2);
         TTS_btn.setOnClickListener(this);
-
-
-
 
         handler = new RecognitionHandler(MyDataActivity.this);
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
@@ -295,10 +310,25 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-
         mResult = "";
         myProblemQuery = database.child("problemTest").
                 orderByChild("problemText");
+        currentPoint=0;
+        problemProgress=0;
+
+
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        mResult = "";
+        myProblemQuery = database.child("problemTest").
+                orderByChild("problemText");
+        currentPoint=0;
+        problemProgress=0;
+
+
     }
 
     @Override
@@ -373,7 +403,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                                 MediaPlayer mediaPlayer = new MediaPlayer();
 
                                 try {
-                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+auth.getCurrentUser().getUid()+".mp3");
+
+                                    String mp3_name = auth.getCurrentUser().getEmail().split("@")[0];
+                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+mp3_name+".mp3");
                                     mediaPlayer.prepare();
                                     mediaPlayer.start();
                                 } catch (IOException e) {
@@ -406,21 +438,38 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             MyProblemDTO myProblemDTO = postSnapShot.getValue(MyProblemDTO.class);
 
             Random levelRandom = new Random();
-            ;
+
             if (myProblemDTO.problemLevel > levelRandom.nextInt(7)){
                 testString2.add(myProblemDTO.problemText);
             }
 
-
         }
-
-
 
         //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i("Change", "gg"+position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.i("Change", "gg"+position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        currentPoint=0;
+        problemProgress=0;
 
     }
 
@@ -451,20 +500,40 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+
             return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+
+
+
+                View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
+                TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-            //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
-            textView.setText(testString2.get(getArguments().getInt(ARG_SECTION_NUMBER)-1));
+                //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
+                user_text = testString2.get(getArguments().getInt(ARG_SECTION_NUMBER)-1);
+
+                textView.setText(user_text);
+
+
+
+
+
             return rootView;
+        }
+
+
+        @Override
+        public void onSaveInstanceState(@NonNull Bundle outState) {
+            super.onSaveInstanceState(outState);
+
+
+            onSaveInstanceState(outState);
         }
     }
 

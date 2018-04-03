@@ -37,6 +37,8 @@ import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -103,6 +105,22 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
+
+
+
+
+        //사용자 정보 업로드 하기 이름 레벨 개인 정보 관련
+
+        Map<String, Integer> mMap = new HashMap();
+        mMap.put("heal", 30);
+        MyStatusDTO myStatusDTO = new MyStatusDTO();
+        myStatusDTO.userLevel = 1;
+        myStatusDTO.userName = auth.getCurrentUser().getEmail().split("@")[0];
+        myStatusDTO.userItem.add(mMap);
+
+
+        database.getReference().child("perosonTest").push().setValue(myStatusDTO);
+
 
 
 
