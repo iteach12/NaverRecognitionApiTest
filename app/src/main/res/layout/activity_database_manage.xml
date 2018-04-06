@@ -34,7 +34,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="항목" />
+            android:text="문제" />
 
         <EditText
             android:id="@+id/item"
@@ -52,7 +52,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="가격" />
+            android:text="레벨" />
 
         <EditText
             android:id="@+id/price"
@@ -62,6 +62,26 @@
             android:inputType="number" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="점수" />
+
+        <EditText
+            android:id="@+id/point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:inputType="number" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

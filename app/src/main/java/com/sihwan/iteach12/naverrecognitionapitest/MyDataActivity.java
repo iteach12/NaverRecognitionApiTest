@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +33,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.vivchar.viewpagerindicator.ViewPagerIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -51,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class MyDataActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener{
+public class MyDataActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ViewPager.OnPageChangeListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -67,6 +69,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private ViewPagerIndicator viewPagerIndicator;
 
     private FirebaseAuth auth;
 
@@ -74,15 +77,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     Query myProblemQuery;
 
-    private static ArrayList<String> testString2;
-    private int PROBLEM_ONE_STR_1 = 1;
-    private int PROBLEM_ONE_STR_2 = 2;
-    private int PROBLEM_ONE_STR_3 = 3;
-    private int PROBLEM_ONE_STR_4 = 4;
-    private int PROBLEM_ONE_STR_5 = 5;
-    private int PROBLEM_ONE_STR_6 = 6;
-    private int PROBLEM_ONE_STR_7 = 7;
-    private int PROBLEM_ONE_STR_RANDOM = 0;
+
+    private static ArrayList<MyProblemDTO> myProblemDTOS;
+    private static MyProblemDTO currentProblemDTO;
 
     private int currentPoint;
     private int problemProgress;
@@ -157,7 +154,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 for(String result : results) {
                     strBuf.append(result);
                     strBuf.append("\n");
-                    if(result.contains(testString2.get(mViewPager.getCurrentItem()))){
+                    if(result.contains(myProblemDTOS.get(mViewPager.getCurrentItem()).problemText)){
                         Log.i("Answer", "correct");
 
                         //정답일 때
@@ -201,22 +198,25 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private void checkTheAnswer(Boolean answer) {
 
-
-
-
         if(answer){
             Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
 
             Log.i("Answer", "Correct");
 
-            mViewPager.getChildAt(mViewPager.getCurrentItem()).setBackgroundColor(Color.GREEN);
+//            mViewPager.getChildAt(mViewPager.getCurrentItem()).setBackgroundColor(Color.GREEN);
 
 
-            currentPoint++;
+            if(!currentProblemDTO.problemSolve){
+                currentPoint += currentProblemDTO.problemPoint;
+                currentProblemDTO.problemSolve = true;
+                currentProblemDTO.problemCorrectAnswer = true;
+                //true로 해줘서 이 문제를 풀었으면 점수를 다시 주지 않도록 설정
+            }
+
+
 
         }else{
-
-            mViewPager.getChildAt(mViewPager.getCurrentItem()).setBackgroundColor(Color.RED);
+            currentProblemDTO.problemSolve = true;
 
         }
 
@@ -243,8 +243,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         //문제 데이터베이스 작성과정
 
-        testString2= new ArrayList<>();
 
+        myProblemDTOS= new ArrayList<>();
+        currentProblemDTO = new MyProblemDTO();
 
         //문제 뽑아내기.
         myProblemQuery = database.child("problemTest").
@@ -437,10 +438,15 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             MyProblemDTO myProblemDTO = postSnapShot.getValue(MyProblemDTO.class);
 
-            Random levelRandom = new Random();
+            //이번 문제들을 리스트에 저장해 둠 여기서 문제당 점수 텍스트 등등 뽑아쓰자
 
-            if (myProblemDTO.problemLevel > levelRandom.nextInt(7)){
-                testString2.add(myProblemDTO.problemText);
+
+            //Random levelRandom = new Random();
+            //levelRandom.nextInt()
+
+            if (myProblemDTO.problemLevel < 2){
+                myProblemDTOS.add(myProblemDTO);
+
             }
 
         }
@@ -448,25 +454,18 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
+
+
+
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.i("Change", "gg"+position);
-            }
+        mViewPager.addOnPageChangeListener(this);
 
-            @Override
-            public void onPageSelected(int position) {
-                Log.i("Change", "gg"+position);
+        viewPagerIndicator = (ViewPagerIndicator)findViewById(R.id.view_pager_indicator);
+        viewPagerIndicator.setupWithViewPager(mViewPager);
+        viewPagerIndicator.addOnPageChangeListener(this);
 
-            }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         currentPoint=0;
         problemProgress=0;
@@ -477,6 +476,37 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     public void onCancelled(DatabaseError databaseError) {
 
     }
+
+
+
+    //뷰페이저 온 페이지 체인지 리스너
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//        Log.i("ViewPagerChange", "onPageScrolled"+position);
+
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        if (currentProblemDTO.problemSolve){
+            Log.i("ViewPagerChange", "이 문제는 이미 풀었습니다.");
+        }
+
+
+
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        Log.i("ViewPagerChange", "onPageStateChanged"+state);
+    }
+    //뷰페이저 온 페이지 체인지 리스너
+
+
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -509,6 +539,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                                  Bundle savedInstanceState) {
 
 
+                Log.d("ViewPagerTest", "onCreateView(First)");
 
                 View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
                 TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -516,9 +547,13 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
                 //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
-                user_text = testString2.get(getArguments().getInt(ARG_SECTION_NUMBER)-1);
+                currentProblemDTO = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)-1);
+                user_text = currentProblemDTO.problemText;
+
+
 
                 textView.setText(user_text);
+                Log.i("onCreateView", "불리어짐");
 
 
 
@@ -527,13 +562,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             return rootView;
         }
 
-
         @Override
-        public void onSaveInstanceState(@NonNull Bundle outState) {
-            super.onSaveInstanceState(outState);
+        public void onDestroyView() {
+            super.onDestroyView();
 
-
-            onSaveInstanceState(outState);
+            Log.d("onDestroyView", "onDestroyView(First)");
         }
     }
 
@@ -558,7 +591,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         public int getCount() {
             // Show 3 total pages.
             // 여기있는 숫자를 바꾸면... 원하는 대로 페이지 수가 바뀐다.
-            return testString2.size();
+            return myProblemDTOS.size();
         }
     }
 

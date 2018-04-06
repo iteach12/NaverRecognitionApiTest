@@ -11,7 +11,11 @@ import java.util.Map;
 public class MyProblemDTO {
 
     public int problemLevel;
+    public int problemPoint;
     public String problemText;
+    public Boolean problemSolve;
+    public Boolean problemCorrectAnswer;
+
 
 
 }

@@ -43,6 +43,7 @@ public class DatabaseManageActivity extends AppCompatActivity {
         create_who.setText(userId);
         final EditText etItem = (EditText) findViewById(R.id.item);
         final EditText etPrice = (EditText) findViewById(R.id.price);
+        final EditText etPoint = (EditText)findViewById(R.id.point);
 
 
 
@@ -100,8 +101,11 @@ public class DatabaseManageActivity extends AppCompatActivity {
 
 
                 MyProblemDTO myProblemDTO = new MyProblemDTO();
-                myProblemDTO.problemLevel = Integer.parseInt(etPrice.getText().toString());
                 myProblemDTO.problemText = etItem.getText().toString();
+                myProblemDTO.problemLevel = Integer.parseInt(etPrice.getText().toString());
+                myProblemDTO.problemPoint = Integer.parseInt(etPoint.getText().toString());
+                myProblemDTO.problemSolve = false;
+                myProblemDTO.problemCorrectAnswer = false;
 
 
                 //HashMap은 정수값을 사용하지 못함?????
