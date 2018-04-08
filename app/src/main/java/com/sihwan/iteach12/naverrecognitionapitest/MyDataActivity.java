@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -69,6 +70,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
     private ViewPagerIndicator viewPagerIndicator;
 
     private FirebaseAuth auth;
@@ -80,9 +82,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private static ArrayList<MyProblemDTO> myProblemDTOS;
     private static MyProblemDTO currentProblemDTO;
+    private static int currentProblemIndex;
 
-    private int currentPoint;
-    private int problemProgress;
+    int currentPoint;
+    int problemProgress;
+
 
 
 
@@ -203,20 +207,31 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             Log.i("Answer", "Correct");
 
-//            mViewPager.getChildAt(mViewPager.getCurrentItem()).setBackgroundColor(Color.GREEN);
 
 
-            if(!currentProblemDTO.problemSolve){
-                currentPoint += currentProblemDTO.problemPoint;
-                currentProblemDTO.problemSolve = true;
-                currentProblemDTO.problemCorrectAnswer = true;
+
+            if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
+
                 //true로 해줘서 이 문제를 풀었으면 점수를 다시 주지 않도록 설정
+                myProblemDTOS.get(currentProblemIndex).problemSolve = true;
+
+                Log.i("CheckAnswer", ""+currentProblemIndex);
+
+
+            }else{
+                //이미 정답이라면
+                Toast.makeText(getApplicationContext(), "이미 정답을 맞췄습니다", Toast.LENGTH_SHORT).show();
+
             }
 
 
 
+
+
+
         }else{
-            currentProblemDTO.problemSolve = true;
+
+
 
         }
 
@@ -226,10 +241,18 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_data);
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -466,7 +489,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         viewPagerIndicator.addOnPageChangeListener(this);
 
 
-
+        currentProblemIndex = 0;
         currentPoint=0;
         problemProgress=0;
 
@@ -490,9 +513,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onPageSelected(int position) {
 
-        if (currentProblemDTO.problemSolve){
-            Log.i("ViewPagerChange", "이 문제는 이미 풀었습니다.");
-        }
+        currentProblemIndex = position;
+        Log.i("position", ""+position);
 
 
 
@@ -531,6 +553,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
 
+
             return fragment;
         }
 
@@ -539,21 +562,24 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                                  Bundle savedInstanceState) {
 
 
-                Log.d("ViewPagerTest", "onCreateView(First)");
-
-                View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
-                TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-                //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
-                currentProblemDTO = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)-1);
-                user_text = currentProblemDTO.problemText;
+            //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
 
 
 
-                textView.setText(user_text);
-                Log.i("onCreateView", "불리어짐");
+            user_text = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemText;
+            Log.i("onCreateViewIndex", ""+(getArguments().getInt(ARG_SECTION_NUMBER)));
+
+
+            textView.setText(user_text);
+
+            if(myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemSolve){
+                rootView.setBackgroundColor(Color.GREEN);
+            }
 
 
 
@@ -562,12 +588,19 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             return rootView;
         }
 
+
+
         @Override
         public void onDestroyView() {
             super.onDestroyView();
 
-            Log.d("onDestroyView", "onDestroyView(First)");
+            Log.d("onDestroyView", "onDestroyView(First)"+currentProblemIndex);
+
         }
+
+
+
+
     }
 
     /**
@@ -584,7 +617,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+
+
+            return PlaceholderFragment.newInstance(position);
         }
 
         @Override
