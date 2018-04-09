@@ -1,20 +1,14 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -23,7 +17,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,10 +42,7 @@ import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public class MyDataActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ViewPager.OnPageChangeListener{
 
@@ -82,11 +71,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private static ArrayList<MyProblemDTO> myProblemDTOS;
-    private static MyProblemDTO currentProblemDTO;
     private static int currentProblemIndex;
 
     int currentPoint;
-    int problemProgress;
+    int currentProgress;
 
 
 
@@ -203,47 +191,74 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private void checkTheAnswer(Boolean answer) {
 
+
+        //이 문제 이미 풀은거면 안올림. 문제 안풀은거면 하나 올림
+        if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
+            currentProgress++;
+
+            if(currentProgress>=myProblemDTOS.size()){
+                Toast.makeText(getApplicationContext(), "다 풀었습니다", Toast.LENGTH_SHORT).show();
+
+            }else{
+
+            }
+        }
+
+
+
         if(answer){
             Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
 
-            Log.i("Answer", "Correct");
-
-
-
-
+            //이 문제를 풀었으면 점수를 다시 주지 않도록 설정
             if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
 
-                //true로 해줘서 이 문제를 풀었으면 점수를 다시 주지 않도록 설정
+                //문제 풀었다 표시
                 myProblemDTOS.get(currentProblemIndex).problemSolve = true;
+
+
+
+
+
+                //정답 맞았다 표시
+                myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = true;
+
+                //점수넣기
+                currentPoint += myProblemDTOS.get(currentProblemIndex).problemPoint;
+
+                //진행상황넣기
+
+
 
                 Log.i("CheckAnswer", ""+currentProblemIndex);
 
 
+                //이제 뷰 갱신해주기
                 //뷰의 변화를 감지해서 다시 그려줌 ㅋㅋㅋㅋㅋ 대박
                 //어뎁터에서 getitemposition을 넣어줌
                 //notifydatasetchanged도 넣어줌
                 mSectionsPagerAdapter.notifyDataSetChanged();
 
 
-
-
-
-
-
-            }else{
-                //이미 정답이라면
-                Toast.makeText(getApplicationContext(), "이미 정답을 맞췄습니다", Toast.LENGTH_SHORT).show();
-
             }
-
-
-
-
 
 
         }else{
 
+                //문제 풀었다 표시
+                myProblemDTOS.get(currentProblemIndex).problemSolve = true;
 
+
+                //정답 틀렸다 표시
+                myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = false;
+
+                Log.i("CheckAnswer", ""+currentProblemIndex);
+
+
+                //이제 뷰 갱신해주기
+                //뷰의 변화를 감지해서 다시 그려줌 ㅋㅋㅋㅋㅋ 대박
+                //어뎁터에서 getitemposition을 넣어줌
+                //notifydatasetchanged도 넣어줌
+                mSectionsPagerAdapter.notifyDataSetChanged();
 
         }
 
@@ -280,7 +295,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
         myProblemDTOS= new ArrayList<>();
-        currentProblemDTO = new MyProblemDTO();
+
 
         //문제 뽑아내기.
         myProblemQuery = database.child("problemTest").
@@ -349,8 +364,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         mResult = "";
         myProblemQuery = database.child("problemTest").
                 orderByChild("problemText");
-        currentPoint=0;
-        problemProgress=0;
+//        currentPoint=0;
+//        currentProgress =0;
 
 
     }
@@ -361,8 +376,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         mResult = "";
         myProblemQuery = database.child("problemTest").
                 orderByChild("problemText");
-        currentPoint=0;
-        problemProgress=0;
+//        currentPoint=0;
+//        currentProgress =0;
 
 
     }
@@ -503,7 +518,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         currentProblemIndex = 0;
         currentPoint=0;
-        problemProgress=0;
+        currentProgress =0;
 
     }
 
@@ -551,7 +566,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+
         public Boolean solve = false;
+        public Boolean answer = false;
+
 
 
         public PlaceholderFragment() {
@@ -596,13 +614,21 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             if(myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemSolve){
 
                 solve = true;
+                answer = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemCorrectAnswer;
+
+                if(answer) {
+                    rootView.setBackgroundColor(Color.GREEN);
+
+                }else{
+
+                    rootView.setBackgroundColor(Color.RED);
+                }
             }
 
 
-            if(solve) {
-                rootView.setBackgroundColor(Color.GREEN);
 
-            }
+
+
             return rootView;
         }
 
