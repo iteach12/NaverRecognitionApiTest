@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -216,6 +217,17 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 myProblemDTOS.get(currentProblemIndex).problemSolve = true;
 
                 Log.i("CheckAnswer", ""+currentProblemIndex);
+
+
+                //뷰의 변화를 감지해서 다시 그려줌 ㅋㅋㅋㅋㅋ 대박
+                //어뎁터에서 getitemposition을 넣어줌
+                //notifydatasetchanged도 넣어줌
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+
+
+
+
 
 
             }else{
@@ -533,12 +545,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment{
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        public Boolean solve = false;
+
 
         public PlaceholderFragment() {
         }
@@ -565,6 +579,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 
+
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
             //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
@@ -577,14 +592,17 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             textView.setText(user_text);
 
+            //현제 문제 모음에서 지금 문제의 해결 여부를 가져옴.
             if(myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemSolve){
-                rootView.setBackgroundColor(Color.GREEN);
+
+                solve = true;
             }
 
 
+            if(solve) {
+                rootView.setBackgroundColor(Color.GREEN);
 
-
-
+            }
             return rootView;
         }
 
@@ -607,7 +625,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -629,6 +649,24 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             // 여기있는 숫자를 바꾸면... 원하는 대로 페이지 수가 바뀐다.
             return myProblemDTOS.size();
         }
+
+        //뷰 다시 그려줄 때 필요한 거임 ㅋㅋㅋㅋ
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        //뷰 다시 그려줄 때 필요한 거임 ㅋㅋㅋㅋ
+
+
+
+
+
     }
 
 
