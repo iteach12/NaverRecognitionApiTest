@@ -1,6 +1,8 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Environment;
@@ -9,6 +11,7 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -198,6 +201,37 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             if(currentProgress>=myProblemDTOS.size()){
                 Toast.makeText(getApplicationContext(), "다 풀었습니다", Toast.LENGTH_SHORT).show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
+                builder.setMessage("모든 문제를 풀었습니다").
+                        setTitle("완료");
+                builder.setPositiveButton("결과보기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
+
+                        intent.putExtra("userPoint", currentPoint);
+
+
+
+
+                        startActivity(intent);
+
+
+                    }
+                }).setNegativeButton("다시하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(), "문제를 다시 풀어보세요.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
 
             }else{
 
