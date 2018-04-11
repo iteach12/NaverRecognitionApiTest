@@ -44,6 +44,7 @@ import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private ViewPagerIndicator viewPagerIndicator;
 
-    private FirebaseAuth auth;
+    private static FirebaseAuth auth;
 
     private DatabaseReference database;
 
@@ -99,7 +100,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
-    String url;
+    static String url = "http://lovepusa.cafe24.com/naverapi.php";
     //contentValues관련 변수들
     String user_name = "iteach12";
     static String user_text;
@@ -469,19 +470,20 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
                 url = "http://lovepusa.cafe24.com/naverapi.php";
 
-                // AsyncTask를 통해 HttpURLConnection 수행.
 
 
+                String mp3_name = auth.getCurrentUser().getEmail().split("@")[0];
+                String current_text = myProblemDTOS.get(currentProblemIndex).problemText;
 
-
-                SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(user_name, user_text, user_voice, user_speed));
+//                AsyncTask를 통해 HttpURLConnection 수행.
+                SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(mp3_name, current_text, user_voice, user_speed));
                 networkTask.execute();
-                Log.i("Result", setContentsValues(user_name, user_text, user_voice, user_speed).toString());
+                Log.i("Result", setContentsValues(mp3_name, current_text, user_voice, user_speed).toString());
 
 
 
-                Snackbar.make(view, "문제읽기", Snackbar.LENGTH_SHORT)
-                        .setAction("재생", new View.OnClickListener() {
+                Snackbar.make(view, "발음듣기", Snackbar.LENGTH_SHORT)
+                        .setAction("시작", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
@@ -578,8 +580,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         Log.i("position", ""+position);
 
 
-
-
     }
 
     @Override
@@ -639,6 +639,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
             user_text = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemText;
+
             Log.i("onCreateViewIndex", ""+(getArguments().getInt(ARG_SECTION_NUMBER)));
 
 
@@ -748,7 +749,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    public ContentValues setContentsValues(String name, String my_text, String voice, int speed){
+    public static ContentValues setContentsValues(String name, String my_text, String voice, int speed){
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
