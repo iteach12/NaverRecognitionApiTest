@@ -45,5 +45,20 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_result2">Result2Activity</string>
+    <string name="title_activity_main">MainActivity</string>
 
+
+
+    <!--문제 뷰페이저 관련-->
+    <string name="problem_text_main">가</string>
+
+    <!--드로어블 메뉴 관련-->
+    <string name="drawable_menu_problem">문제풀기</string>
+    <string name="drawable_menu_insert">문제넣기</string>
+
+
+
+    <!--카드뷰 관련    -->
+    <string name="main_flat_button_1_clicked">Flat Button 1</string>
+    <string name="main_flat_button_2_clicked">Flat Button 2</string>
 </resources>

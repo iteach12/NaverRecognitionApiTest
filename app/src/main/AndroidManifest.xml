@@ -67,11 +67,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".DatabaseManageActivity" />
         <activity
-            android:name=".ResultActivity"
-            android:label="@string/title_activity_result" />
-        <activity
             android:name=".Result2Activity"
             android:label="@string/title_activity_result2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -230,7 +230,8 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-
+            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            startActivity(intent);
 
 
         } else if (id == R.id.nav_send) {
