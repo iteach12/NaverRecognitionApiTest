@@ -21,7 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    final int ITEM_SIZE = 4;
+    final int ITEM_SIZE = 10;
     Toolbar toolbar;
     FloatingActionButton fab;
     DrawerLayout drawer;
@@ -76,10 +76,16 @@ public class MainActivity extends AppCompatActivity
 
         List<Item> items = new ArrayList<>();
         Item[] item = new Item[ITEM_SIZE];
-        item[0] = new Item(R.drawable.card_back1, "발음연습", "쉽고 즐겁게 발음을 연습해 보세요");
-        item[1] = new Item(R.drawable.card_back2, "순위보기", "나의 순위를 확인하세요.");
-        item[2] = new Item(R.drawable.card_back3, "내 정보", "나의 학습 상황을 점검해 보세요.");
-        item[3] = new Item(R.drawable.card_back4, "오락하기", "친구들과 함께 오락을 즐기면서 연습해 보세요.");
+        item[0] = new Item("발음연습", "쉽고 즐겁게 발음을 연습해 보세요");
+        item[1] = new Item("순위보기", "나의 순위를 확인하세요.");
+        item[2] = new Item("내 정보", "나의 학습 상황을 점검해 보세요.");
+        item[3] = new Item("오락하기", "친구들과 함께 오락을 즐기면서 연습해 보세요.");
+        item[4] = new Item("연습문제1", "연습문제를 풀어서 실력을 늘려봅시다.");
+        item[5] = new Item("연습문제2", "연습문제를 풀어서 실력을 늘려봅시다.");
+        item[6] = new Item("연습문제3", "실력을 늘려봅시다.");
+        item[7] = new Item("연습문제4", "굿굿굿이예요 굿굿굿");
+        item[8] = new Item("연습문제5", "친구들과 함께 오락을 즐기면서 연습해 보세요.");
+        item[9] = new Item("연습문제6", "친구들과 함께 오락을 즐기면서 연습해 보세요.");
 
 
         for (int i = 0; i < ITEM_SIZE; i++) {

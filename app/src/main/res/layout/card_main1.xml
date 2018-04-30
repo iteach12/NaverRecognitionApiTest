@@ -2,41 +2,44 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_main_1_1"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
     android:layout_marginBottom="@dimen/main_card_margin_vertical"
     android:layout_marginEnd="@dimen/main_card_margin_horizontal"
     android:layout_marginStart="@dimen/main_card_margin_horizontal"
     android:layout_marginTop="@dimen/main_card_margin_vertical"
     android:background="?attr/selectableItemBackgroundBorderless"
-    card_view:cardBackgroundColor="@android:color/transparent"
     card_view:cardCornerRadius="@dimen/card_recycler_corner_radius"
     card_view:cardElevation="@dimen/card_recycler_elevation">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
 
         <ImageView
             android:id="@+id/img_main_card_1"
             android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            android:layout_alignParentTop="true"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/card_back1"/>
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_card_main1_subtitle"
+            android:layout_alignStart="@+id/tv_card_main1_subtitle"
+            android:src="@drawable/ic_hearing_black_24dp" />
 
         <TextView
             android:id="@+id/tv_card_main_1_title"
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/img_main_card_1"
-            android:layout_marginEnd="@dimen/card_title_margin"
-            android:layout_marginStart="@dimen/card_title_margin"
-            android:layout_marginTop="@dimen/card_title_margin_top"
+
             android:text="발음연습"
-            android:textColor="@color/com_facebook_blue" />
+            android:textColor="@color/com_facebook_blue"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="12dp"
+            android:layout_toEndOf="@+id/img_main_card_1"
+            />
 
         <TextView
             android:id="@+id/tv_card_main1_subtitle"
@@ -49,28 +52,16 @@
             android:layout_marginTop="@dimen/card_button_margin"
             android:text="쉽고 즐겁게 한글 발음 연습을 해 보세요." />
 
-        <Button
-            android:id="@+id/btn_card_main1_action1"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tv_card_main1_subtitle"
-            android:layout_alignBottom="@+id/tv_card_main1_subtitle"
-            android:layout_alignParentEnd="true"
-            android:text="시작"
-            android:textColor="@color/colorAccent" />
-
         <!--<Button-->
-            <!--android:id="@+id/btn_card_main1_action2"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/tv_card_main1_subtitle"-->
-            <!--android:layout_marginBottom="@dimen/card_button_margin"-->
-            <!--android:layout_marginTop="@dimen/card_button_margin"-->
-            <!--android:layout_toEndOf="@id/btn_card_main1_action1"-->
-            <!--android:text="버튼2"-->
-            <!--android:textColor="@color/colorAccent" />-->
+        <!--android:id="@+id/btn_card_main1_action1"-->
+        <!--style="@style/Widget.AppCompat.Button.Borderless"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBaseline="@+id/tv_card_main1_subtitle"-->
+        <!--android:layout_alignBottom="@+id/tv_card_main1_subtitle"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:text="시작"-->
+        <!--android:textColor="@color/colorAccent" />-->
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

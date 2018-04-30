@@ -43,7 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Item item = items.get(position);
 //        Drawable drawable = ContextCompat.getDrawable(context, item.getImage());
-        Glide.with(context).load(item.getImage()).into(holder.image);
+//        Glide.with(context).load(item.getImage()).into(holder.image);
 //        holder.image.setImageDrawable(drawable);
         holder.title.setText(item.getTitle());
         holder.subTitle.setText(item.getSubTitle());
@@ -61,20 +61,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
+//        ImageView image;
         TextView title;
         TextView subTitle;
-        Button btn1;
-        Button btn2;
+//        Button btn1;
+//        Button btn2;
 
         CardView cardview;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.img_main_card_1);
+//            image = (ImageView) itemView.findViewById(R.id.img_main_card_1);
             title = (TextView) itemView.findViewById(R.id.tv_card_main_1_title);
             subTitle = (TextView) itemView.findViewById(R.id.tv_card_main1_subtitle);
-            btn1 = (Button)itemView.findViewById(R.id.btn_card_main1_action1);
+//            btn1 = (Button)itemView.findViewById(R.id.btn_card_main1_action1);
 //            btn2 = (Button)itemView.findViewById(R.id.btn_card_main1_action2);
             cardview = (CardView) itemView.findViewById(R.id.card_main_1_1);
         }
