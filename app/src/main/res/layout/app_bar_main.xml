@@ -31,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimaryDark"
         app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
 </android.support.design.widget.CoordinatorLayout>

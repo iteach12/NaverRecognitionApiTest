@@ -20,6 +20,27 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
+        <item
+            android:id="@+id/nav_manage2"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+        <item
+            android:id="@+id/nav_manage3"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+        <item
+            android:id="@+id/nav_manage4"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+        <item
+            android:id="@+id/nav_manage5"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+        <item
+            android:id="@+id/nav_manage6"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+
     </group>
 
     <item android:title="Communicate">

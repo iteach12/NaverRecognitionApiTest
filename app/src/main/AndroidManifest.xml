@@ -7,10 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
     <application
         android:allowBackup="true"
@@ -25,12 +22,16 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- 페이스북 관련 -->
@@ -56,26 +57,16 @@
         </activity>
         <!-- 페이스북 관련 -->
 
-        <activity android:name=".BoardActivity" />
-        <activity
-            android:name=".MyDataActivity"
-            android:label="@string/title_activity_my_data"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DatabaseManageActivity" />
-        <activity
-            android:name=".Result2Activity"
-            android:label="@string/title_activity_result2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
+        <activity android:name=".BoardActivity"></activity>
+        <activity android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".DatabaseManageActivity"
+            android:label="@string/title_activity_my_data"
+            ></activity>
+        <activity android:name=".MyDataActivity"
+            android:label="@string/title_activity_my_data"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

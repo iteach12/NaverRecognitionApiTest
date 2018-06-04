@@ -17,10 +17,12 @@
     <string name="main_btn_myinfo_string">강의실</string>
     <string name="main_btn_rangking_string">랭킹확인</string>
     <string name="main_btn_study_string">학습하기</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">문해력</string>
+    <string name="title_activity_home">home in</string>
+
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
+    <string name="prompt_email">ID</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
