@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //아이디 저장용
     String userID;
     String userPassword;
-    String testString;
+
     String sfName = "UserID";
     Button loginButton;
 
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         userID = sf.getString("userID", "");
         userPassword = sf.getString("userPassword", "");
-        testString = sf.getString("testString", "");
+
 
 
         if (userID == null || "".equals(userID)) {

@@ -1,6 +1,7 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,12 +19,22 @@ import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     final int ITEM_SIZE = 10;
     Toolbar toolbar;
@@ -33,7 +44,19 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
 
-    FirebaseAuth auth;
+    private FirebaseAuth auth;
+    private DatabaseReference database;
+    private FirebaseStorage storage;
+    private Query myProfile;
+    private ArrayList<MyStatusDTO> myDownloadDTO = new ArrayList<>();
+
+
+
+
+    //아이디 저장용
+    String userID;
+    String sfName = "UserID";
+
 
 
     @Override
@@ -42,7 +65,36 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
+        //파이어베이스 사용자 관련해서 사용하기 위해 만들어주는것.
         auth = FirebaseAuth.getInstance();
+
+        //파이어베이스 파일 스토리지 사용관련
+        storage = FirebaseStorage.getInstance();
+
+        //파이어베이스 데이터베이스
+        database = FirebaseDatabase.getInstance().getReference();
+
+        SharedPreferences sf = getSharedPreferences(sfName, 0);
+
+        userID = sf.getString("userID", "");
+
+        //사용자 정보 업로드 하기 이름 레벨 개인 정보 관련
+
+        Map<String, Integer> mMap = new HashMap();
+        mMap.put("heal", 30);
+        mMap.put("attack", 200);
+        MyStatusDTO myStatusDTO = new MyStatusDTO();
+        myStatusDTO.userLevel = 20;
+        myStatusDTO.userName = userID;
+        myStatusDTO.userItem.add(mMap);
+
+
+        //push가 붙으면 계속 추가하기임 같은 데이터라 할지라도 또 추가됨.
+        //push를 빼면 덮어쓰기임 이전 데이터를 지우고 지금 데이터를 입력함.
+        database.child("userProfile").child(userID).setValue(myStatusDTO);
+
+
+
         initView();
 
 
@@ -148,7 +200,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -171,4 +223,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 }

@@ -2,6 +2,7 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -87,6 +88,13 @@ public class HomeActivity extends AppCompatActivity
         //파이어베이스 데이터베이스
         database = FirebaseDatabase.getInstance();
 
+
+
+
+
+
+
+
         //파일 업로드 때문에 권한주기 (파일 경로 때무임)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
@@ -109,17 +117,7 @@ public class HomeActivity extends AppCompatActivity
 
 
 
-        //사용자 정보 업로드 하기 이름 레벨 개인 정보 관련
 
-        Map<String, Integer> mMap = new HashMap();
-        mMap.put("heal", 30);
-        MyStatusDTO myStatusDTO = new MyStatusDTO();
-        myStatusDTO.userLevel = 1;
-        myStatusDTO.userName = auth.getCurrentUser().getEmail().split("@")[0];
-        myStatusDTO.userItem.add(mMap);
-
-
-        database.getReference().child("perosonTest").push().setValue(myStatusDTO);
 
 
 
