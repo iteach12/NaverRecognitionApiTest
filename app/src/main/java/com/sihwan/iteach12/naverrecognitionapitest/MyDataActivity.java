@@ -80,11 +80,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     int currentPoint;
     int currentProgress;
 
-
-
-
-
-
+    TextView my_prononTextView;
 
 
     private static final String TAG = MyDataActivity.class.getSimpleName();
@@ -94,7 +90,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private MyDataActivity.RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
-    private String mResult;
+    private static String mResult;
     private AudioWriterPCM writer;
     //음성합성 관련
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
@@ -111,6 +107,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     //플로팅 액션 버튼
     FloatingActionButton TTS_btn;
     FloatingActionButton STT_btn;
+
+
+
+
 
 
 
@@ -136,8 +136,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 // Extract obj property typed with String.
                 mResult = (String) (msg.obj);
 
-
-//                txtResult.setText(mResult);
                 break;
 
             case R.id.finalResult:
@@ -162,6 +160,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
                 mResult = strBuf.toString();
+
 
                 checkTheAnswer(finalAnswer);
 
@@ -214,10 +213,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
                         intent.putExtra("userPoint", currentPoint);
 
-
-
-
                         startActivity(intent);
+                        finish();
 
 
                     }
@@ -231,14 +228,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
-
-
-
             }else{
 
             }
         }
-
 
 
         if(answer){
@@ -249,10 +242,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
                 //문제 풀었다 표시
                 myProblemDTOS.get(currentProblemIndex).problemSolve = true;
-
-
-
-
 
                 //정답 맞았다 표시
                 myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = true;
@@ -314,8 +303,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_my_data);
 
 
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -326,6 +313,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         user_name = auth.getCurrentUser().getEmail().split("@")[0];
 
 
+
+
+
+
         //문제 데이터베이스 작성과정
 
 
@@ -333,7 +324,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
         //문제 뽑아내기.
-        myProblemQuery = database.child("problemTest").
+        myProblemQuery = database.child("problem").child("basic_1").
                 orderByChild("problemText");
 
         //addChileEventListener은 데이터베이스에 추가가될 때 사용 일단 지금은 쓸일이 없지? 아닌가 새로운 아이템 나올때?
@@ -397,7 +388,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         mResult = "";
-        myProblemQuery = database.child("problemTest").
+        myProblemQuery = database.child("problem").child("basic_1").
                 orderByChild("problemText");
 //        currentPoint=0;
 //        currentProgress =0;
@@ -409,7 +400,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     protected void onRestart(){
         super.onRestart();
         mResult = "";
-        myProblemQuery = database.child("problemTest").
+        myProblemQuery = database.child("problem").child("basic_1").
                 orderByChild("problemText");
 //        currentPoint=0;
 //        currentProgress =0;
@@ -541,8 +532,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
 
-
-
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
@@ -550,7 +539,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         viewPagerIndicator = (ViewPagerIndicator)findViewById(R.id.view_pager_indicator);
         viewPagerIndicator.setupWithViewPager(mViewPager);
         viewPagerIndicator.addOnPageChangeListener(this);
-
 
         currentProblemIndex = 0;
         currentPoint=0;
@@ -630,6 +618,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            TextView my_pronon = (TextView) rootView.findViewById(R.id.my_pronon_tv);
 
 
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -645,6 +634,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             textView.setText(user_text);
 
+            //메인 핸들러에서 (음성인식 쪽) 프래그먼트의 뷰를 직접 건드리지 못하더라??
+            //static이 아닌 값을 못가져와서 mResult를 static으로 만들어 줬다. 문제가 생길까??
+            my_pronon.setText(mResult);
+
             //현제 문제 모음에서 지금 문제의 해결 여부를 가져옴.
             if(myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemSolve){
 
@@ -659,10 +652,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                     rootView.setBackgroundColor(Color.RED);
                 }
             }
-
-
-
-
 
             return rootView;
         }

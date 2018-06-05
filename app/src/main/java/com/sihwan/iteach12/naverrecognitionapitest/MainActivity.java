@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
     DrawerLayout drawer;
     NavigationView navigationView;
+
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
 
