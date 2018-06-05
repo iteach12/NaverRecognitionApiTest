@@ -108,8 +108,8 @@ public class DatabaseManageActivity extends AppCompatActivity {
                 myProblemDTO.problemCorrectAnswer = false;
 
 
-                //HashMap은 정수값을 사용하지 못함?????
-                database.child("problemTest").push().setValue(myProblemDTO);
+
+                database.child("problem").child("basic_1").push().setValue(myProblemDTO);
                 //Firebase database 업로드 테스트용. 일단은 성공함.
 
 

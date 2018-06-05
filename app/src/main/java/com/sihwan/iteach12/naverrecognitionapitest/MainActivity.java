@@ -1,10 +1,12 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,8 +50,8 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth auth;
     private DatabaseReference database;
     private FirebaseStorage storage;
-    private Query myProfile;
-    private ArrayList<MyStatusDTO> myDownloadDTO = new ArrayList<>();
+
+
 
 
 
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         Map<String, Integer> mMap = new HashMap();
         mMap.put("heal", 30);
         mMap.put("attack", 200);
-        MyStatusDTO myStatusDTO = new MyStatusDTO();
+        final MyStatusDTO myStatusDTO = new MyStatusDTO();
         myStatusDTO.userLevel = 20;
         myStatusDTO.userName = userID;
         myStatusDTO.userItem.add(mMap);
@@ -92,6 +95,52 @@ public class MainActivity extends AppCompatActivity
         //push가 붙으면 계속 추가하기임 같은 데이터라 할지라도 또 추가됨.
         //push를 빼면 덮어쓰기임 이전 데이터를 지우고 지금 데이터를 입력함.
         database.child("userProfile").child(userID).setValue(myStatusDTO);
+
+
+
+        database.child("userProfile").child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                MyStatusDTO myStatusDTO1 = new MyStatusDTO();
+                myStatusDTO1 = dataSnapshot.getValue(MyStatusDTO.class);
+                if(myStatusDTO1 != null){
+                    Toast.makeText(getApplicationContext(), ""+myStatusDTO1.userLevel, Toast.LENGTH_SHORT).show();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("불러온 내용").
+                            setMessage(myStatusDTO1.userLevel+"\n"+myStatusDTO1.userName+"\n").
+
+
+
+                            setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+
+
+                                }
+                            });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "로딩에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
 
 
@@ -201,7 +250,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
 
+            Intent myIntent = new Intent(MainActivity.this, MyDataActivity.class);
+            startActivity(myIntent);
+
         } else if (id == R.id.nav_gallery) {
+
+            Intent myIntent = new Intent(MainActivity.this, DatabaseManageActivity.class);
+            startActivity(myIntent);
 
         } else if (id == R.id.nav_slideshow) {
 
