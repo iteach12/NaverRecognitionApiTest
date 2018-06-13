@@ -3,6 +3,7 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Environment;
@@ -32,7 +33,6 @@ import android.widget.Toast;
 
 import com.github.vivchar.viewpagerindicator.ViewPagerIndicator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +44,6 @@ import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,13 +73,21 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     Query myProblemQuery;
 
 
+    //문제 관련 정보 인텐트로 넘어온 것
+    String problem_choice1;
+    int problem_diffi;
+
     private static ArrayList<MyProblemDTO> myProblemDTOS;
+    private static ArrayList<String> problem_key_list;
     private static int currentProblemIndex;
+
+    //아이디 저장용
+    String userID;
+    String sfName = "UserID";
+
 
     int currentPoint;
     int currentProgress;
-
-    TextView my_prononTextView;
 
 
     private static final String TAG = MyDataActivity.class.getSimpleName();
@@ -107,11 +114,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     //플로팅 액션 버튼
     FloatingActionButton TTS_btn;
     FloatingActionButton STT_btn;
-
-
-
-
-
 
 
     //데이터베이스 불러오자.
@@ -157,11 +159,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                         finalAnswer=true;
                     }else{
                         user_text=result;
+                        Log.i("Answer", "wrooooong");
                     }
                 }
                 mResult = strBuf.toString();
-
-
                 checkTheAnswer(finalAnswer);
 
 
@@ -200,7 +201,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             currentProgress++;
 
             if(currentProgress>=myProblemDTOS.size()){
-                Toast.makeText(getApplicationContext(), "다 풀었습니다", Toast.LENGTH_SHORT).show();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
                 builder.setMessage("모든 문제를 풀었습니다").
@@ -214,14 +214,13 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                         intent.putExtra("userPoint", currentPoint);
 
                         startActivity(intent);
+
+                        //끄기
+                        naverRecognizer.getSpeechRecognizer().release();
+
                         finish();
 
 
-                    }
-                }).setNegativeButton("다시하기", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getApplicationContext(), "문제를 다시 풀어보세요.", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -246,8 +245,19 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 //정답 맞았다 표시
                 myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = true;
 
-                //점수넣기
+                //정답 맞춘 경우를 uid키값으로 저장해두기
+                ///그래야 나중에 맞춘 문제를 알아낼 수 있으니깐??
+                problem_key_list.get(currentProblemIndex);
+
+
+
+                //점수넣기 & 서버 업로드하기
                 currentPoint += myProblemDTOS.get(currentProblemIndex).problemPoint;
+
+
+
+                //이렇게 데이터베이스에 하위 차일드를 지정해서 필요한 데이터만 올려줄 수도 있고만 기래.
+
 
                 //진행상황넣기
 
@@ -275,6 +285,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 //정답 틀렸다 표시
                 myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = false;
 
+
+                //틀린 문제 확인하기
+
+
+                //틀린문제는 내가 따로 저장해 둬야 함.
+                database.child("userProfile").child(userID).child("wrongProblem").push().setValue(problem_key_list.get(currentProblemIndex));
+
+
                 Log.i("CheckAnswer", ""+currentProblemIndex);
 
 
@@ -293,10 +311,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -313,7 +327,15 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         user_name = auth.getCurrentUser().getEmail().split("@")[0];
 
 
+        SharedPreferences sf = getSharedPreferences(sfName, 0);
 
+        userID = sf.getString("userID", "");
+
+
+        //인텐트 넘어온것. 문제 뽑아올것 정하기 child로 구분됨.
+        Intent intent = getIntent();
+        problem_choice1 = intent.getExtras().getString("problem_choice1");
+        problem_diffi = intent.getExtras().getInt("difficult");
 
 
 
@@ -321,47 +343,16 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
         myProblemDTOS= new ArrayList<>();
+        problem_key_list = new ArrayList<>();
 
 
         //문제 뽑아내기.
-        myProblemQuery = database.child("problem").child("basic_1").
-                orderByChild("problemText");
+        myProblemQuery = database.child("problem").child(problem_choice1);
+        myProblemQuery.addListenerForSingleValueEvent(this);
 
         //addChileEventListener은 데이터베이스에 추가가될 때 사용 일단 지금은 쓸일이 없지? 아닌가 새로운 아이템 나올때?
         //아니면 새로운 랭킹이 생겼을 때? 아니면 새로운 아이템 있을 때?
-        myProblemQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         //이게 핵심 ㅋㅋ 문제 가져오는 방법 implements해놨음
-        myProblemQuery.addValueEventListener(this);
-
-
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -388,8 +379,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         mResult = "";
-        myProblemQuery = database.child("problem").child("basic_1").
-                orderByChild("problemText");
+
 //        currentPoint=0;
 //        currentProgress =0;
 
@@ -400,8 +390,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     protected void onRestart(){
         super.onRestart();
         mResult = "";
-        myProblemQuery = database.child("problem").child("basic_1").
-                orderByChild("problemText");
+//        myProblemQuery = database.child("problem").child("basic_1").
+//                orderByChild("problemText");
 //        currentPoint=0;
 //        currentProgress =0;
 
@@ -511,9 +501,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     //ㅋㅋ 문제 뽑아오기. 랜덤 넣기 가능함.
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
+
+        myProblemDTOS.clear();
+        problem_key_list.clear();
         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
 
             MyProblemDTO myProblemDTO = postSnapShot.getValue(MyProblemDTO.class);
+            String problemKey = postSnapShot.getKey();
+
 
             //이번 문제들을 리스트에 저장해 둠 여기서 문제당 점수 텍스트 등등 뽑아쓰자
 
@@ -521,10 +516,27 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             //Random levelRandom = new Random();
             //levelRandom.nextInt()
 
-            if (myProblemDTO.problemLevel < 2){
+            if(problem_diffi < 6){
+                if(myProblemDTO.problemLevel == problem_diffi){
+                    myProblemDTOS.add(myProblemDTO);
+                    problem_key_list.add(problemKey);
+                }
+            }else{
                 myProblemDTOS.add(myProblemDTO);
-
+                problem_key_list.add(problemKey);
             }
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
 
@@ -535,6 +547,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
+
 
         viewPagerIndicator = (ViewPagerIndicator)findViewById(R.id.view_pager_indicator);
         viewPagerIndicator.setupWithViewPager(mViewPager);
@@ -633,6 +646,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
             textView.setText(user_text);
+            textView.setTextColor(Color.BLACK);
 
             //메인 핸들러에서 (음성인식 쪽) 프래그먼트의 뷰를 직접 건드리지 못하더라??
             //static이 아닌 값을 못가져와서 mResult를 static으로 만들어 줬다. 문제가 생길까??
@@ -645,11 +659,12 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 answer = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemCorrectAnswer;
 
                 if(answer) {
-                    rootView.setBackgroundColor(Color.GREEN);
+                    textView.setTextColor(Color.GREEN);
+
 
                 }else{
 
-                    rootView.setBackgroundColor(Color.RED);
+                    textView.setTextColor(Color.RED);
                 }
             }
 

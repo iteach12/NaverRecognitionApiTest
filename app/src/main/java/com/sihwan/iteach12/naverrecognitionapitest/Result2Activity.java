@@ -2,6 +2,7 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,11 +13,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Result2Activity extends AppCompatActivity {
 
+
+
+    private FirebaseAuth auth;
+    private DatabaseReference database;
+
+
+
+    //아이디 저장용
+    String userID;
+    String sfName = "UserID";
+    int userLevel;
+    MyStatusDTO my = new MyStatusDTO();
 
     TextView textview1;
     TextView pointTextview;
@@ -34,6 +56,16 @@ public class Result2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_result2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance().getReference();
+        SharedPreferences sf = getSharedPreferences(sfName, 0);
+
+        userID = sf.getString("userID", "");
+
+
 
         textview1 = (TextView)findViewById(R.id.firstTextView);
         textview2 = (TextView)findViewById(R.id.secondTextView);
@@ -56,9 +88,31 @@ public class Result2Activity extends AppCompatActivity {
 
 
 
-
+        //점수 넘어온거
         Intent intent = getIntent();
-        int userPoint = intent.getExtras().getInt("userPoint");
+        final int userPoint = intent.getExtras().getInt("userPoint");
+        //점수 넘어온거
+
+        //점수 데이터베이스에서 불러온거
+
+
+        database.child("userProfile").child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                my = dataSnapshot.getValue(MyStatusDTO.class);
+                userLevel = my.userLevel;
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         pointTextview.setText(String.valueOf(userPoint)+"점");
         resultBtn = (Button)findViewById(R.id.button2);
         resultBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +126,13 @@ public class Result2Activity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
+
+                                //push가 붙으면 계속 추가하기임 같은 데이터라 할지라도 또 추가됨.
+                                //push를 빼면 덮어쓰기임 이전 데이터를 지우고 지금 데이터를 입력함.
+                                database.child("userProfile").child(userID).child("userLevel").setValue(userLevel+userPoint);
+
+                                Intent myIntent = new Intent (Result2Activity.this, PracticeActivity.class);
+                                startActivity(myIntent);
 
 
                             }

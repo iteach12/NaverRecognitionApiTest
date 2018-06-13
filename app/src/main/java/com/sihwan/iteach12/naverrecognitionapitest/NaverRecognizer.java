@@ -49,7 +49,7 @@ class NaverRecognizer implements SpeechRecognitionListener {
 		try {
 			mRecognizer.recognize(new SpeechConfig(
 									LanguageType.KOREAN,
-									EndPointDetectType.AUTO));
+									EndPointDetectType.MANUAL));
 		} catch (SpeechRecognitionException e) {
 			e.printStackTrace();
 		}

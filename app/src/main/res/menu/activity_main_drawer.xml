@@ -5,54 +5,43 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/today"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="오늘의문제" />
+        <item
+            android:id="@+id/prac_moum"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="모음연습" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/prac_jaum"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="자음연습" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/ranking_up"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="등급올리기" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/prac_myProblem"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="나만의문제" />
+
         <item
-            android:id="@+id/nav_manage2"
+            android:id="@+id/game"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-        <item
-            android:id="@+id/nav_manage3"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-        <item
-            android:id="@+id/nav_manage4"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-        <item
-            android:id="@+id/nav_manage5"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-        <item
-            android:id="@+id/nav_manage6"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="대결하기" />
 
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="공유하기">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/problem_input"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="문제넣기" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="공유하기" />
         </menu>
     </item>
 

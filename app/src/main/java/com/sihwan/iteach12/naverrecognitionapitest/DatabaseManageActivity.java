@@ -44,6 +44,7 @@ public class DatabaseManageActivity extends AppCompatActivity {
         final EditText etItem = (EditText) findViewById(R.id.item);
         final EditText etPrice = (EditText) findViewById(R.id.price);
         final EditText etPoint = (EditText)findViewById(R.id.point);
+        final EditText etChild = (EditText)findViewById(R.id.child1);
 
 
 
@@ -109,8 +110,13 @@ public class DatabaseManageActivity extends AppCompatActivity {
 
 
 
-                database.child("problem").child("basic_1").push().setValue(myProblemDTO);
+
+
+                database.child("problem").child(etChild.getText().toString()).push().setValue(myProblemDTO);
+
+
                 //Firebase database 업로드 테스트용. 일단은 성공함.
+
 
 
 
