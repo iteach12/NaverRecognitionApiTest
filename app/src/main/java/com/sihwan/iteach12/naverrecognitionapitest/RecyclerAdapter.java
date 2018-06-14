@@ -4,6 +4,7 @@ package com.sihwan.iteach12.naverrecognitionapitest;
  * Created by iteach12 on 2018. 4. card_back3..
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+
 
 
 import java.util.List;
@@ -66,6 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 //        ImageView image;
         TextView title;
         TextView subTitle;
+
 //        Button btn1;
 //        Button btn2;
 
@@ -79,6 +83,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 //            btn1 = (Button)itemView.findViewById(R.id.btn_card_main1_action1);
 //            btn2 = (Button)itemView.findViewById(R.id.btn_card_main1_action2);
             cardview = (CardView) itemView.findViewById(R.id.card_main_1_1);
+
+
+
+
+
         }
     }
 }

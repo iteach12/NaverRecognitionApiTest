@@ -1,78 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_main_1_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/main_card_margin_vertical"
-        android:layout_marginEnd="@dimen/main_card_margin_horizontal"
-        android:layout_marginStart="@dimen/main_card_margin_horizontal"
-        android:layout_marginTop="@dimen/main_card_margin_vertical"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        card_view:cardCornerRadius="@dimen/card_recycler_corner_radius"
-        card_view:cardElevation="@dimen/card_recycler_elevation">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/card_main_1_1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/main_card_margin_vertical"
+    android:layout_marginEnd="@dimen/main_card_margin_horizontal"
+    android:layout_marginStart="@dimen/main_card_margin_horizontal"
+    android:layout_marginTop="@dimen/main_card_margin_vertical"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    card_view:cardCornerRadius="@dimen/card_recycler_corner_radius"
+    card_view:cardElevation="@dimen/card_recycler_elevation">
 
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical">
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
             <ImageView
                 android:id="@+id/img_main_card_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/tv_card_main1_subtitle"
-                android:layout_alignStart="@+id/tv_card_main1_subtitle"
-                android:src="@drawable/ic_hearing_black_24dp" />
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+
+                android:src="@android:drawable/ic_secure" />
 
             <TextView
                 android:id="@+id/tv_card_main_1_title"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:text="발음연습"
-                android:textColor="@color/com_facebook_blue"
-                android:layout_alignParentTop="true"
                 android:layout_marginStart="7dp"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/img_main_card_1"
-                />
+                android:layout_gravity="center"
+                android:text="발음연습"
+
+                android:textColor="@color/com_facebook_blue" />
 
             <TextView
                 android:id="@+id/tv_card_main1_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_card_main_1_title"
-                android:layout_marginBottom="@dimen/card_subtitle_margin"
-                android:layout_marginEnd="@dimen/card_subtitle_margin"
-                android:layout_marginStart="@dimen/card_subtitle_margin"
-                android:layout_marginTop="@dimen/card_button_margin"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
+                android:layout_marginStart="7dp"
+                android:layout_gravity="center"
 
-                android:text="쉽고 즐겁게 한글 발음 연습을 해 보세요." />
+                android:text="쉽고 즐겁게 해 보세요." />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
 
-            <!--<Button-->
-            <!--android:id="@+id/btn_card_main1_action1"-->
-            <!--style="@style/Widget.AppCompat.Button.Borderless"-->
-            <!--android:layout_width="wrap_content"-->
+                />
+
+
+
+
+
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/rate"-->
+            <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBaseline="@+id/tv_card_main1_subtitle"-->
-            <!--android:layout_alignBottom="@+id/tv_card_main1_subtitle"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:text="시작"-->
-            <!--android:textColor="@color/colorAccent" />-->
+            <!--android:background="?attr/selectableItemBackground"-->
+            <!--android:clickable="true"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingEnd="@dimen/card_title_margin"-->
+            <!--android:paddingStart="@dimen/card_title_margin">-->
 
-        </RelativeLayout>
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginEnd="@dimen/card_title_margin"-->
+                <!--android:src="@drawable/ic_star_border_black_24dp" />-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginEnd="@dimen/card_title_margin"-->
+                <!--android:src="@drawable/ic_star_border_black_24dp" />-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginEnd="@dimen/card_title_margin"-->
+                <!--android:src="@drawable/ic_star_border_black_24dp" />-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginEnd="@dimen/card_title_margin"-->
+                <!--android:src="@drawable/ic_star_border_black_24dp" />-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginEnd="@dimen/card_title_margin"-->
+                <!--android:src="@drawable/ic_star_border_black_24dp" />-->
 
 
-    </android.support.v7.widget.CardView>
+
+
+        <!--</LinearLayout>-->
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
 
 
 

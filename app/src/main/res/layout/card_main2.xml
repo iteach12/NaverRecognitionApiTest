@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/img_main_card_2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -31,10 +31,10 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/img_main_card_2"
+            android:layout_below="@id/img_main_card_2"
             android:layout_margin="@dimen/card_title_margin"
             android:text="순위 보기"
-            android:textColor="@color/com_facebook_button_text_color" />
+            />
 
         <RelativeLayout
             android:layout_width="match_parent"

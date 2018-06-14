@@ -1,31 +1,20 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
-import android.content.ContentValues;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.naver.speech.clientapi.SpeechRecognitionResult;
-import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +39,6 @@ public class PracticeActivity extends AppCompatActivity implements ValueEventLis
 
     FloatingActionButton fab;
 
-    //핸들러
 
 
     @Override
@@ -91,12 +79,12 @@ public class PracticeActivity extends AppCompatActivity implements ValueEventLis
 
         List<Item> items = new ArrayList<>();
         Item[] item = new Item[ITEM_SIZE];
-        item[0] = new Item("ㅏ, ㅓ, ㅗ, ㅜ", "모음연습 1단계", "moum", 1);
-        item[1] = new Item("ㅡ, ㅣ", "모음연습 2단계", "moum", 2);
-        item[2] = new Item("ㅑ, ㅕ, ㅛ, ㅠ", "모음연습 3단계", "moum", 3);
-        item[3] = new Item("ㅐ, ㅔ, ㅚ, ㅟ", "모음연습 4단계", "moum", 4);
-        item[4] = new Item("ㅘ, ㅝ, ㅙ", "모음연습 5단계", "moum", 5);
-        item[5] = new Item("발음연습", "연습문제를 풀어서 실력을 늘려봅시다.", "moum", 6);
+        item[0] = new Item("ㅏ, ㅓ, ㅗ, ㅜ", "모음연습 1단계                                    ", "moum", 1);
+        item[1] = new Item("ㅡ, ㅣ", "모음연습 2단계                                    ", "moum", 2);
+        item[2] = new Item("ㅑ, ㅕ, ㅛ, ㅠ", "모음연습 3단계                                    ", "moum", 3);
+        item[3] = new Item("ㅐ, ㅔ, ㅚ, ㅟ", "모음연습 4단계                                    ", "moum", 4);
+        item[4] = new Item("ㅘ, ㅝ, ㅙ", "모음연습 5단계                                    ", "moum", 5);
+        item[5] = new Item("발음연습", "연습문제를 풀어서 실력을 늘려봅시다.                                    ", "moum", 6);
         item[6] = new Item("달인의 도전!", "도전 문제를 맞춰서 달인 칭호를 획득하세요.", "moum", 7);
 
 
