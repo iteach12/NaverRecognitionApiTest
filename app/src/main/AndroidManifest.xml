@@ -71,6 +71,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sihwan.iteach12.naverrecognitionapitest.MainActivity" />
         </activity>
+        <activity
+            android:name=".JaumActivity"
+            android:label="@string/title_activity_jaum"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sihwan.iteach12.naverrecognitionapitest.MainActivity" />
+        </activity>
+        <activity
+            android:name=".EasyWordActivity"
+            android:label="@string/title_activity_easy_word"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sihwan.iteach12.naverrecognitionapitest.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

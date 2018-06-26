@@ -5,29 +5,41 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/today"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="오늘의문제" />
-        <item
             android:id="@+id/prac_moum"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@android:drawable/ic_secure"
             android:title="모음연습" />
         <item
             android:id="@+id/prac_jaum"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@android:drawable/ic_partial_secure"
             android:title="자음연습" />
         <item
-            android:id="@+id/ranking_up"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="등급올리기" />
+            android:id="@+id/easy_word"
+            android:icon="@android:drawable/ic_secure"
+            android:title="받침없는낱말" />
+        <item
+            android:id="@+id/middle_word"
+            android:icon="@android:drawable/ic_secure"
+            android:title="받침있는낱말" />
+        <item
+            android:id="@+id/no_mean_word"
+            android:icon="@android:drawable/ic_secure"
+            android:title="의미없는글자" />
+        <item
+            android:id="@+id/sokdam"
+            android:icon="@android:drawable/ic_secure"
+            android:title="속담연습" />
+        <item
+            android:id="@+id/today"
+            android:icon="@android:drawable/ic_partial_secure"
+            android:title="오늘의문제" />
         <item
             android:id="@+id/prac_myProblem"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@android:drawable/ic_secure"
             android:title="나만의문제" />
 
         <item
             android:id="@+id/game"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@android:drawable/ic_secure"
             android:title="대결하기" />
 
     </group>

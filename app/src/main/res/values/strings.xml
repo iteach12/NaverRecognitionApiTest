@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NaverRecognitionApiTest</string>
+    <string name="app_name">바른발음</string>
     <string name="action_settings">Settings</string>
     <string name="str_start">음성인식 시작</string>
     <string name="str_stop">음성인식 종료</string>
@@ -40,15 +40,17 @@
     <!--페이스북 관련-->
 
     <!--뷰페이저 관련-->
-    <string name="title_activity_my_data">MyDataActivity</string>
+    <string name="title_activity_my_data">문제를 풀어봅시다</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_result">ResultActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_result2">Result2Activity</string>
-    <string name="title_activity_main">MainActivity</string>
-
+    <string name="title_notifications">설정</string>
+    <string name="title_activity_result2">결과화면</string>
+    <string name="title_activity_main">바른발음</string>
+    <string name="title_activity_scrolling">모음연습</string>
+    <string name="title_activity_jaum_practice">자음연습</string>
+    <string name="title_activity_jaum">자음연습</string>
 
     <!--문제 뷰페이저 관련-->
     <string name="problem_text_main">가</string>
@@ -61,7 +63,7 @@
     <!--카드뷰 관련    -->
     <string name="main_flat_button_1_clicked">Flat Button 1</string>
     <string name="main_flat_button_2_clicked">Flat Button 2</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -151,5 +153,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="title_activity_jaum_practice">자음연습</string>
+    <string name="title_activity_easy_word">받침없는낱말</string>
+
 </resources>

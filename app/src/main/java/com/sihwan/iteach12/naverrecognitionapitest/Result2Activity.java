@@ -133,6 +133,7 @@ public class Result2Activity extends AppCompatActivity {
 
                                 Intent myIntent = new Intent (Result2Activity.this, PracticeActivity.class);
                                 startActivity(myIntent);
+                                finish();
 
 
                             }

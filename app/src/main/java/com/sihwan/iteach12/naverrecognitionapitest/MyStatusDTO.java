@@ -18,6 +18,7 @@ public class MyStatusDTO {
 
     //내 아이템
     public ArrayList<Map<String, Integer>> userItem = new ArrayList<>();
+    public ArrayList<Map<String, Integer>> wrongWord = new ArrayList<>();
 
 
 

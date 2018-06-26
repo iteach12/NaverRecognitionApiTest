@@ -40,12 +40,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.naver.speech.clientapi.SpeechRecognitionResult;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.sihwan.iteach12.naverrecognitionapitest.utils.AudioWriterPCM;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class MyDataActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ViewPager.OnPageChangeListener{
 
@@ -78,6 +81,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     int problem_diffi;
 
     private static ArrayList<MyProblemDTO> myProblemDTOS;
+    private static ArrayList<MyProblemDTO> randomDTOS;
+
+
+
     private static ArrayList<String> problem_key_list;
     private static int currentProblemIndex;
 
@@ -88,10 +95,26 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     int currentPoint;
     int currentProgress;
+    int currentEnergy;
+
+
+
+    //shinebutton에너지 관련
+    ShineButton shineButton1;
+    ShineButton shineButton2;
+    ShineButton shineButton3;
+
 
 
     private static final String TAG = MyDataActivity.class.getSimpleName();
-    private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
+//    private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
+//    v1 기존 아이디입니다
+
+
+    //  v2 새로운 아이디 입니다
+    private static final String CLIENT_ID = "q8pyzxbayz";
+
+
     // 1. "내 애플리케이션"에서 Client ID를 확인해서 이곳에 적어주세요.
     // 2. build.gradle (Module:app)에서 패키지명을 실제 개발자센터 애플리케이션 설정의 '안드로이드 앱 패키지 이름'으로 바꿔 주세요
 
@@ -103,13 +126,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
-    static String url = "http://lovepusa.cafe24.com/naverapi.php";
+    static String url = "http://lovepusa.cafe24.com/naverapi_v2.php";
     //contentValues관련 변수들
     String user_name = "iteach12";
     static String user_text;
     String user_voice = "mijin";
     int user_speed = 0;
     //음성합성 관련
+
 
     //플로팅 액션 버튼
     FloatingActionButton TTS_btn;
@@ -128,10 +152,18 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 writer = new AudioWriterPCM(
                         Environment.getExternalStorageDirectory().getAbsolutePath() + "/NaverSpeechTest");
                 writer.open("Test");
+
+                STT_btn.setEnabled(true);
+                STT_btn.setClickable(true);
+
                 break;
 
             case R.id.audioRecording:
                 writer.write((short[]) msg.obj);
+                STT_btn.setEnabled(false);
+                STT_btn.setClickable(false);
+
+
                 break;
 
             case R.id.partialResult:
@@ -165,7 +197,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 mResult = strBuf.toString();
                 checkTheAnswer(finalAnswer);
 
-
+                STT_btn.setEnabled(true);
+                STT_btn.setClickable(true);
 
 
                 break;
@@ -285,6 +318,46 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 //정답 틀렸다 표시
                 myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = false;
 
+                //에너지 깎기
+                currentEnergy-=1;
+
+                if(currentEnergy == 2){
+                    shineButton3.setChecked(false,true);
+                }else if(currentEnergy ==1){
+                    shineButton2.setChecked(false,true);
+                }else if(currentEnergy == 0){
+                    shineButton1.setChecked(false,true);
+
+
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder(MyDataActivity.this);
+                    builder2.setMessage("실패").
+                            setTitle("에너지가 바닥났습니다.");
+                    builder2.setPositiveButton("결과보기", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
+
+                            intent.putExtra("userPoint", currentPoint);
+
+                            startActivity(intent);
+
+                            //끄기
+                            naverRecognizer.getSpeechRecognizer().release();
+
+                            finish();
+
+
+                        }
+                    });
+
+                    AlertDialog dialog2 = builder2.create();
+                    dialog2.setCancelable(false);
+                    dialog2.setCanceledOnTouchOutside(false);
+                    dialog2.show();
+                }
+
+
 
                 //틀린 문제 확인하기
 
@@ -343,6 +416,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
         myProblemDTOS= new ArrayList<>();
+        randomDTOS = new ArrayList<>();
         problem_key_list = new ArrayList<>();
 
 
@@ -362,8 +436,27 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         TTS_btn = (FloatingActionButton) findViewById(R.id.fab2);
         TTS_btn.setOnClickListener(this);
 
+
+        //내 에너지.
+        currentEnergy = 3;
+
+
+        shineButton1 = (ShineButton)findViewById(R.id.po_image1);
+        shineButton2 = (ShineButton)findViewById(R.id.po_image2);
+        shineButton3 = (ShineButton)findViewById(R.id.po_image3);
+        shineButton1.setChecked(true, true);
+        shineButton2.setChecked(true, true);
+        shineButton3.setChecked(true, true);
+
+
         handler = new RecognitionHandler(MyDataActivity.this);
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
+
+
+
+
+
+
 
     }
 
@@ -469,6 +562,13 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                             public void onClick(View view) {
 
                                 MediaPlayer mediaPlayer = new MediaPlayer();
+                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mediaPlayer) {
+                                        mediaPlayer.stop();
+                                        mediaPlayer.reset();
+                                    }
+                                });
 
                                 try {
 
@@ -513,39 +613,46 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             //이번 문제들을 리스트에 저장해 둠 여기서 문제당 점수 텍스트 등등 뽑아쓰자
 
 
-            //Random levelRandom = new Random();
-            //levelRandom.nextInt()
-
-            if(problem_diffi < 6){
+            if(problem_diffi<6){
                 if(myProblemDTO.problemLevel == problem_diffi){
                     myProblemDTOS.add(myProblemDTO);
+                    randomDTOS.add(myProblemDTO);
                     problem_key_list.add(problemKey);
                 }
             }else{
                 myProblemDTOS.add(myProblemDTO);
+                randomDTOS.add(myProblemDTO);
                 problem_key_list.add(problemKey);
+
             }
-
-
-
-
-
-
-
-
-
-
-
 
 
         }
 
+        if(myProblemDTOS.size()>10){
+
+            //문제가 개수가 10개를 넘으면 myProblemDTOS를 클리어 시킨다. 싹 지워주고 랜덤으로 10개를 넣어줄거야
+            myProblemDTOS.clear();
+            Random r = new Random();
+            for (int i=0;i<10;i++){
+                int bound = r.nextInt(randomDTOS.size()-1);
+                myProblemDTOS.add(randomDTOS.get(bound));
+                randomDTOS.remove(bound);
+            }
+        }
+
+
+        Collections.shuffle(myProblemDTOS);
+
+
         //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
+
+                // Set up the ViewPager with the sections adapter.
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
         mViewPager.addOnPageChangeListener(this);
 
 
@@ -630,8 +737,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
             View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
+
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             TextView my_pronon = (TextView) rootView.findViewById(R.id.my_pronon_tv);
+
+
 
 
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));

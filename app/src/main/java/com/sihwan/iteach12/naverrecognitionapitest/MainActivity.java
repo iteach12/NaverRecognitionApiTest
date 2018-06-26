@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     //아이디 저장용 SharedPreferrence
     String userID;
     String sfName = "UserID";
+
     int userLevel;
 
     //내 정보 저장용. 얘를 옮겨다닐거야. 액티비티 별로
@@ -224,9 +225,23 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.prac_jaum) {
 
+            Intent myIntent = new Intent(MainActivity.this, JaumActivity.class);
+            startActivity(myIntent);
+
+        } else if (id == R.id.easy_word) {
+
+            Intent myIntent = new Intent(MainActivity.this, EasyWordActivity.class);
+            startActivity(myIntent);
+
+        } else if (id == R.id.middle_word) {
 
 
-        } else if (id == R.id.ranking_up) {
+
+        } else if (id == R.id.no_mean_word) {
+
+
+
+        } else if (id == R.id.sokdam) {
 
 
 
@@ -266,23 +281,23 @@ public class MainActivity extends AppCompatActivity
         if(myStatusDTO1 != null){
 
 
-            builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("불러온 내용").
-                    setMessage(myStatusDTO1.userLevel+"\n"+myStatusDTO1.userName+"\n").
-
-
-
-                    setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-
-
-                        }
-                    });
-
-            dialog = builder.create();
-            dialog.show();
+//            builder = new AlertDialog.Builder(MainActivity.this);
+//            builder.setTitle("불러온 내용").
+//                    setMessage(myStatusDTO1.userLevel+"\n"+myStatusDTO1.userName+"\n").
+//
+//
+//
+//                    setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//
+//                        }
+//                    });
+//
+//            dialog = builder.create();
+//            dialog.show();
 
 
             header_userID.setText("이름 : "+myStatusDTO1.userName);
@@ -307,6 +322,10 @@ public class MainActivity extends AppCompatActivity
             //push를 빼면 덮어쓰기임 이전 데이터를 지우고 지금 데이터를 입력함.
             //내 프로필은 메인화면 시작하면서 새로 덮어쓰기??? nono 최초에 한 번만 하는거임
             database.child("userProfile").child(userID).setValue(myStatusDTO);
+
+
+
+
         }
 
 
@@ -322,7 +341,7 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        dialog.dismiss();
+//        dialog.dismiss();
 //        SharedPreferences sf = getSharedPreferences(sfName, 0);
 //        SharedPreferences.Editor editor = sf.edit();
 //
@@ -342,7 +361,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        dialog.dismiss();
+//        dialog.dismiss();
 
     }
 }

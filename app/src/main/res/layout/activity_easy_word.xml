@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.sihwan.iteach12.naverrecognitionapitest.PracticeActivity">
+    tools:context="com.sihwan.iteach12.naverrecognitionapitest.EasyWordActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -22,8 +22,6 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
-
-
             <ImageView
                 android:id="@+id/imageView01"
                 android:layout_width="match_parent"
@@ -32,8 +30,6 @@
                 android:fitsSystemWindows="true"
                 android:src="@drawable/card_back1"
                 app:layout_collapseMode="parallax" />
-
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -44,10 +40,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include
-
-        layout="@layout/content_scrolling"
-        />
+    <include layout="@layout/content_easy_word" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

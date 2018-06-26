@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.sihwan.iteach12.naverrecognitionapitest.PracticeActivity"
+    tools:context="com.sihwan.iteach12.naverrecognitionapitest.EasyWordActivity"
     android:background="@color/com_smart_login_code"
-    tools:showIn="@layout/activity_practice">
+    tools:showIn="@layout/activity_easy_word">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,24 +19,24 @@
         tools:context="com.sihwan.iteach12.naverrecognitionapitest.MainActivity"
         android:orientation="vertical"
         android:gravity="center"
-        tools:showIn="@layout/activity_practice">
+        tools:showIn="@layout/activity_easy_word">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView_easyword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:background="@android:color/transparent"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@android:color/transparent"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
 
-        >
+            >
 
-    </android.support.v7.widget.RecyclerView>
-
+        </android.support.v7.widget.RecyclerView>
+        <!--<include layout="@layout/content_main" />-->
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
