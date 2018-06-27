@@ -14,7 +14,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="4dp"
         android:text="@string/problem_text_main"
-        android:textSize="120sp"
+        android:textSize="80sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -50,15 +50,14 @@
             android:gravity="center">
 
 
-
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/my_pronon_tv"
                 android:textSize="20dp"
                 android:text="sample"/>
+
+
 
 
 

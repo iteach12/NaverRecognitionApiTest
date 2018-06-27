@@ -1,5 +1,6 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import android.animation.Animator;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,8 +30,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.github.vivchar.viewpagerindicator.ViewPagerIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -139,6 +141,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     FloatingActionButton TTS_btn;
     FloatingActionButton STT_btn;
 
+
+    //로티에 애니메이션 뷰
+    LottieAnimationView lottieCorrect;
 
     //데이터베이스 불러오자.
 
@@ -267,7 +272,16 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
         if(answer){
-            Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
+
+
+
+
+            lottieCorrect.playAnimation();
+
+
+
+
+//            Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
 
             //이 문제를 풀었으면 점수를 다시 주지 않도록 설정
             if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
@@ -437,6 +451,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         TTS_btn.setOnClickListener(this);
 
 
+
+
+
         //내 에너지.
         currentEnergy = 3;
 
@@ -447,6 +464,32 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         shineButton1.setChecked(true, true);
         shineButton2.setChecked(true, true);
         shineButton3.setChecked(true, true);
+
+        lottieCorrect = (LottieAnimationView) findViewById(R.id.lottieCorrect);
+        lottieCorrect.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                lottieCorrect.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                lottieCorrect.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        lottieCorrect.setVisibility(View.INVISIBLE);
+
+
 
 
         handler = new RecognitionHandler(MyDataActivity.this);
@@ -741,12 +784,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             TextView my_pronon = (TextView) rootView.findViewById(R.id.my_pronon_tv);
 
-
-
-
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
-            //리스트에서 문제 번호를 뽑아와 그 다음 그 문제번호에 들어있는 문제를 화면에 띄워준다.
 
 
 

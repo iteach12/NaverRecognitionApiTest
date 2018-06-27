@@ -1,5 +1,6 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
+import android.animation.Animator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,7 +42,7 @@ public class Result2Activity extends AppCompatActivity {
     int userLevel;
     MyStatusDTO my = new MyStatusDTO();
 
-    TextView textview1;
+
     TextView pointTextview;
     TextView textview2;
 
@@ -66,10 +68,33 @@ public class Result2Activity extends AppCompatActivity {
         userID = sf.getString("userID", "");
 
 
-
-        textview1 = (TextView)findViewById(R.id.firstTextView);
         textview2 = (TextView)findViewById(R.id.secondTextView);
         pointTextview = (TextView)findViewById(R.id.pointTextView);
+        LottieAnimationView lottieTrophy = (LottieAnimationView)findViewById(R.id.lottieTrophy);
+        lottieTrophy.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        lottieTrophy.playAnimation();
+
 
         present.add("최신형컴퓨터");
         present.add("예쁜어항");

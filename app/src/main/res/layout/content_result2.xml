@@ -9,18 +9,27 @@
     tools:showIn="@layout/activity_result2">
 
 
-    <TextView
-        android:id="@+id/firstTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="100dp"
-        android:text="당신의 점수는"
-        android:textSize="40sp"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="227dp"
+        android:layout_height="168dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieTrophy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_fileName="trophy.json"
+            app:lottie_loop="false" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/pointTextView"
@@ -32,8 +41,9 @@
         android:text="TextView"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <TextView
         android:id="@+id/secondTextView"

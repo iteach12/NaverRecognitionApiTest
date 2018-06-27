@@ -26,4 +26,5 @@
     <dimen name="card_subtitle_margin">8dp</dimen>
     <dimen name="card_button_margin">4dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
+
 </resources>
