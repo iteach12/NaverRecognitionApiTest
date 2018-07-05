@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         StringBuffer buffer = new StringBuffer();
         Random random = new Random();
 
-        String chars[] = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".split(",");
+        String chars[] = "presentChoice,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".split(",");
 
         for (int i = 0; i < length; i++) {
             buffer.append(chars[random.nextInt(chars.length)]);
@@ -203,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign in fails, display presentChoice message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
 
                             //updateUI(null);
@@ -244,7 +244,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             }
                             //updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign in fails, display presentChoice message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();

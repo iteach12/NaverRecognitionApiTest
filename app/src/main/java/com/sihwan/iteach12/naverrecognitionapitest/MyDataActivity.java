@@ -56,10 +56,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
+     * fragments for each of the sections. We use presentChoice
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
+     * may be best to switch to presentChoice
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -82,8 +82,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     String problem_choice1;
     int problem_diffi;
 
+
     private static ArrayList<MyProblemDTO> myProblemDTOS;
     private static ArrayList<MyProblemDTO> randomDTOS;
+    private static ArrayList<String> wrongProblem;
+    private static String wrong_text;
 
 
 
@@ -196,6 +199,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                         finalAnswer=true;
                     }else{
                         user_text=result;
+                        wrong_text=myProblemDTOS.get(mViewPager.getCurrentItem()).problemText;
                         Log.i("Answer", "wrooooong");
                     }
                 }
@@ -249,7 +253,18 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
                         Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
 
+
+
                         intent.putExtra("userPoint", currentPoint);
+                        intent.putExtra("result", resultJudge(currentPoint));
+
+                        intent.putStringArrayListExtra("wrong", wrongProblem);
+
+
+
+                        Log.i("result_log", "현재 결과값 :"+String.valueOf(resultJudge(currentPoint)));
+                        Log.i("result_log", "현재 점수 :"+String.valueOf(currentPoint));
+
 
                         startActivity(intent);
 
@@ -263,6 +278,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 });
 
                 AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
 
             }else{
@@ -333,47 +350,56 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 myProblemDTOS.get(currentProblemIndex).problemCorrectAnswer = false;
 
                 //에너지 깎기
-                currentEnergy-=1;
-
-                if(currentEnergy == 2){
-                    shineButton3.setChecked(false,true);
-                }else if(currentEnergy ==1){
-                    shineButton2.setChecked(false,true);
-                }else if(currentEnergy == 0){
-                    shineButton1.setChecked(false,true);
+                if(problem_diffi == 100){
 
 
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(MyDataActivity.this);
-                    builder2.setMessage("실패").
-                            setTitle("에너지가 바닥났습니다.");
-                    builder2.setPositiveButton("결과보기", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                    currentEnergy-=1;
 
-                            Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
-
-                            intent.putExtra("userPoint", currentPoint);
-
-                            startActivity(intent);
-
-                            //끄기
-                            naverRecognizer.getSpeechRecognizer().release();
-
-                            finish();
+                    if(currentEnergy == 2){
+                        shineButton3.setChecked(false,true);
+                    }else if(currentEnergy ==1){
+                        shineButton2.setChecked(false,true);
+                    }else if(currentEnergy == 0){
+                        shineButton1.setChecked(false,true);
 
 
-                        }
-                    });
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MyDataActivity.this);
+                        builder2.setMessage("실패").
+                                setTitle("에너지가 바닥났습니다.");
+                        builder2.setPositiveButton("결과보기", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                    AlertDialog dialog2 = builder2.create();
-                    dialog2.setCancelable(false);
-                    dialog2.setCanceledOnTouchOutside(false);
-                    dialog2.show();
+                                Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
+
+                                intent.putExtra("userPoint", currentPoint);
+                                intent.putExtra("result", resultJudge(currentPoint));
+
+                                startActivity(intent);
+
+                                //끄기
+                                naverRecognizer.getSpeechRecognizer().release();
+
+                                finish();
+
+
+                            }
+                        });
+
+                        AlertDialog dialog2 = builder2.create();
+                        dialog2.setCancelable(false);
+                        dialog2.setCanceledOnTouchOutside(false);
+                        dialog2.show();
+                    }
+
+
+
                 }
 
 
 
                 //틀린 문제 확인하기
+                wrongProblem.add(wrong_text);
 
 
                 //틀린문제는 내가 따로 저장해 둬야 함.
@@ -391,10 +417,29 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
+    }
 
+    protected int resultJudge(int point){
 
+        int result;
 
+        int result_percent = ((point*100)/myProblemDTOS.size());
 
+        if(result_percent >= 85){
+            result = 5;
+        }else if(result_percent >= 75 && result_percent < 85){
+            result = 4;
+        }else if(result_percent >= 65 && result_percent < 75){
+            result = 3;
+        }else if(result_percent >= 55 && result_percent < 65){
+            result = 2;
+        }else if(result_percent >= 45 && result_percent < 55){
+            result = 1;
+        }else{
+            result = 1;
+        }
+
+        return result;
     }
 
 
@@ -432,6 +477,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         myProblemDTOS= new ArrayList<>();
         randomDTOS = new ArrayList<>();
         problem_key_list = new ArrayList<>();
+        wrongProblem = new ArrayList<>();
 
 
         //문제 뽑아내기.
@@ -442,7 +488,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         //아니면 새로운 랭킹이 생겼을 때? 아니면 새로운 아이템 있을 때?
         //이게 핵심 ㅋㅋ 문제 가져오는 방법 implements해놨음
 
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return presentChoice fragment for each of the three
         // primary sections of the activity.
 
         STT_btn = findViewById(R.id.fab);
@@ -455,7 +501,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
         //내 에너지.
-        currentEnergy = 3;
+
 
 
         shineButton1 = (ShineButton)findViewById(R.id.po_image1);
@@ -464,6 +510,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         shineButton1.setChecked(true, true);
         shineButton2.setChecked(true, true);
         shineButton3.setChecked(true, true);
+
+        shineButton1.setVisibility(View.INVISIBLE);
+        shineButton2.setVisibility(View.INVISIBLE);
+        shineButton3.setVisibility(View.INVISIBLE);
 
         lottieCorrect = (LottieAnimationView) findViewById(R.id.lottieCorrect);
         lottieCorrect.addAnimatorListener(new Animator.AnimatorListener() {
@@ -553,7 +603,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify presentChoice parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -695,13 +745,24 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mViewPager.addOnPageChangeListener(this);
 
 
         viewPagerIndicator = (ViewPagerIndicator)findViewById(R.id.view_pager_indicator);
         viewPagerIndicator.setupWithViewPager(mViewPager);
         viewPagerIndicator.addOnPageChangeListener(this);
+
+
+        if(problem_diffi == 100){
+
+            currentEnergy = 3;
+
+            shineButton1.setVisibility(View.VISIBLE);
+            shineButton2.setVisibility(View.VISIBLE);
+            shineButton3.setVisibility(View.VISIBLE);
+
+        }
+
 
         currentProblemIndex = 0;
         currentPoint=0;
@@ -743,7 +804,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
     /**
-     * A placeholder fragment containing a simple view.
+     * A placeholder fragment containing presentChoice simple view.
      */
     public static class PlaceholderFragment extends Fragment{
         /**
@@ -761,7 +822,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         /**
-         * Returns a new instance of this fragment for the given section
+         * Returns presentChoice new instance of this fragment for the given section
          * number.
          */
         public static PlaceholderFragment newInstance(int sectionNumber) {
@@ -806,12 +867,12 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 answer = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemCorrectAnswer;
 
                 if(answer) {
-                    textView.setTextColor(Color.GREEN);
+                    textView.setTextColor(Color.WHITE);
 
 
                 }else{
 
-                    textView.setTextColor(Color.RED);
+                    textView.setTextColor(Color.DKGRAY);
                 }
             }
 
@@ -834,7 +895,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * A {@link FragmentPagerAdapter} that returns presentChoice fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
@@ -848,7 +909,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
+            // Return presentChoice PlaceholderFragment (defined as presentChoice static inner class below).
 
 
 

@@ -11,11 +11,11 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="227dp"
-        android:layout_height="168dp"
+        android:layout_width="214dp"
+        android:layout_height="166dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="36dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,51 +24,166 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieTrophy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:lottie_fileName="trophy.json"
             app:lottie_loop="false" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/pointTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        android:text="TextView"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
-    <TextView
-        android:id="@+id/secondTextView"
+    <LinearLayout
+        android:id="@+id/starContainer"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="입니다."
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/resultContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pointTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieStar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="star.json"
+                app:lottie_loop="false" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieStar2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="star.json"
+                app:lottie_loop="false" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieStar3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="star.json"
+                app:lottie_loop="false" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieStar4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="star.json"
+                app:lottie_loop="false"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieStar5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="star.json"
+                app:lottie_loop="false" />
+        </LinearLayout>
+
+
+
+
+        <!--<TextView-->
+        <!--android:id="@+id/pointTextView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="T"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textSize="30sp" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/secondTextView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+
+        <!--android:text="점을 얻었습니다."-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textSize="30sp" />-->
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/resultContainer"
+        android:layout_width="291dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="선물받기"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/mentTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="정말 잘하는데요?"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="164dp"
+        android:layout_height="151dp"
+
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottiePresent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_fileName="happybirthday_a.json"
+            app:lottie_loop="true" />
+    </LinearLayout>
+
+
 </android.support.constraint.ConstraintLayout>

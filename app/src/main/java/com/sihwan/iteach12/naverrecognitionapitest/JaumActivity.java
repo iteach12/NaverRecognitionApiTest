@@ -84,7 +84,7 @@ public class JaumActivity extends AppCompatActivity implements ValueEventListene
         item[3] = new Item("ㅅ, ㅈ, ㅊ, ㅉ, ㅆ", "자음연습 4단계                                    ", "jaum", 4);
         item[4] = new Item("ㅇ, ㅎ, ㄹ", "자음연습 5단계                                    ", "jaum", 5);
         item[5] = new Item("발음연습", "연습문제를 풀어서 실력을 늘려봅시다.                                    ", "jaum", 6);
-        item[6] = new Item("달인의 도전!", "도전 문제를 맞춰서 달인 칭호를 획득하세요.", "jaum", 7);
+        item[6] = new Item("달인의 도전!", "도전 문제를 맞춰서 달인 칭호를 획득하세요.", "jaum", 100);
 
 
 
@@ -121,5 +121,12 @@ public class JaumActivity extends AppCompatActivity implements ValueEventListene
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

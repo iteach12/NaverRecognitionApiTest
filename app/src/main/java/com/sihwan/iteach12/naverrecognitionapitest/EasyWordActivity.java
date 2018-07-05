@@ -91,7 +91,7 @@ public class EasyWordActivity extends AppCompatActivity implements ValueEventLis
         item[3] = new Item("ㅅ, ㅈ, ㅊ, ㅉ, ㅆ", "받침없는낱말 4단계                                    ", "easy", 4);
         item[4] = new Item("ㅇ, ㅎ, ㄹ", "받침없는낱말 5단계                                    ", "easy", 5);
         item[5] = new Item("발음연습", "연습문제를 풀어서 실력을 늘려봅시다.                                    ", "easy", 6);
-        item[6] = new Item("달인의 도전!", "도전 문제를 맞춰서 달인 칭호를 획득하세요.", "easy", 7);
+        item[6] = new Item("달인의 도전!", "도전 문제를 맞춰서 달인 칭호를 획득하세요.", "easy", 100);
 
 
 
@@ -116,5 +116,11 @@ public class EasyWordActivity extends AppCompatActivity implements ValueEventLis
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

@@ -62,7 +62,8 @@
         <activity
             android:name=".Result2Activity"
             android:label="@string/title_activity_result2"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".PracticeActivity"
             android:label="@string/title_activity_scrolling"

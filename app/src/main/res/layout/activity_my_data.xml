@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#3a99d8"
     tools:context="com.sihwan.iteach12.naverrecognitionapitest.MyDataActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -25,6 +26,9 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name">
 
+
+
+
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -43,10 +47,10 @@
         android:layout_marginTop = "80dp"
         app:delimiterSize = "8dp"
         app:itemIcon = "@drawable/ic_insert_emotion_black_24dp"
-        app:itemScale = "1.5"
-        app:itemSelectedTint = "@color/colorAccent"
+        app:itemScale = "2.0"
+        app:itemSelectedTint = "@android:color/holo_orange_light"
         app:itemSize = "10dp"
-        app:itemTint = "@color/colorPrimary"
+        app:itemTint = "#FFFFFF"
         />
 
 
@@ -128,6 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@android:color/holo_orange_light"
         app:srcCompat="@drawable/ic_record_voice_over_black_24dp" />
 
     <android.support.design.widget.FloatingActionButton
@@ -136,6 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|bottom"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@android:color/holo_orange_light"
         app:srcCompat="@drawable/ic_hearing_black_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>
