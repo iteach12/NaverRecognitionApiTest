@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,8 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -293,20 +289,9 @@ public class Result2Activity extends AppCompatActivity implements Animator.Anima
             @Override
             public void onClick(View view) {
 
-                String wrongResult = "";
-                for(int j=0;j<wrongProblem.size();j++){
-                    if(j==wrongProblem.size()-1){
-                        wrongResult+=wrongProblem.get(j).toString();
-                    }else{
-                        wrongResult+=wrongProblem.get(j).toString() + ", ";
-                    }
+                WrongWordDialog dialog = new WrongWordDialog(Result2Activity.this, wrongProblem);
+                dialog.show();
 
-
-                }
-
-
-                Snackbar.make(view, "틀린문제 : "+wrongResult, Snackbar.LENGTH_LONG)
-                        .setAction("확인", null).show();
             }
         });
 

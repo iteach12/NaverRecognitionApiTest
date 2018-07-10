@@ -59,6 +59,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="100dp">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recoding_lottie"
+            app:lottie_fileName="microphone.json"
+            app:lottie_loop="true"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"

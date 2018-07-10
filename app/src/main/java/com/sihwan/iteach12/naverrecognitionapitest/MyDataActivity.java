@@ -109,6 +109,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     ShineButton shineButton2;
     ShineButton shineButton3;
 
+    //현재 상태
+    TextView nowStatus;
+
 
 
     private static final String TAG = MyDataActivity.class.getSimpleName();
@@ -147,6 +150,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     //로티에 애니메이션 뷰
     LottieAnimationView lottieCorrect;
+    LottieAnimationView lottieRecoding;
 
     //데이터베이스 불러오자.
 
@@ -167,6 +171,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.audioRecording:
+
+                //녹음시작되면 애니메이션 시작
+                if(!lottieRecoding.isAnimating()){
+                    lottieRecoding.setVisibility(View.VISIBLE);
+                    lottieRecoding.playAnimation();
+                }
+
+
                 writer.write((short[]) msg.obj);
                 STT_btn.setEnabled(false);
                 STT_btn.setClickable(false);
@@ -181,6 +193,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.finalResult:
+
+                //최종결과 나오면 애니메이션끝내기
+                lottieRecoding.setVisibility(View.INVISIBLE);
+                lottieRecoding.pauseAnimation();
+
                 // Extract obj property typed with String array.
                 // The first element is recognition result for speech.
                 SpeechRecognitionResult speechRecognitionResult = (SpeechRecognitionResult) msg.obj;
@@ -233,6 +250,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+
 
 
     private void checkTheAnswer(Boolean answer) {
@@ -397,7 +415,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
 
-
                 //틀린 문제 확인하기
                 wrongProblem.add(wrong_text);
 
@@ -497,13 +514,16 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         TTS_btn.setOnClickListener(this);
 
 
+        //현재 상태 나타낼 텍스트뷰(녹음중인지 뭔지)
+
+        lottieRecoding = (LottieAnimationView)findViewById(R.id.recoding_lottie);
+        lottieRecoding.setVisibility(View.INVISIBLE);
+
+
 
 
 
         //내 에너지.
-
-
-
         shineButton1 = (ShineButton)findViewById(R.id.po_image1);
         shineButton2 = (ShineButton)findViewById(R.id.po_image2);
         shineButton3 = (ShineButton)findViewById(R.id.po_image3);
@@ -843,9 +863,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
 
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            TextView my_pronon = (TextView) rootView.findViewById(R.id.my_pronon_tv);
-
-
+//            TextView my_pronon = (TextView) rootView.findViewById(R.id.my_pronon_tv);
 
 
             user_text = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemText;
@@ -858,7 +876,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             //메인 핸들러에서 (음성인식 쪽) 프래그먼트의 뷰를 직접 건드리지 못하더라??
             //static이 아닌 값을 못가져와서 mResult를 static으로 만들어 줬다. 문제가 생길까??
-            my_pronon.setText(mResult);
+//            my_pronon.setText(mResult);
 
             //현제 문제 모음에서 지금 문제의 해결 여부를 가져옴.
             if(myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemSolve){
