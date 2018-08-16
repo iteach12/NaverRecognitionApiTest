@@ -138,17 +138,26 @@ public class Result2Activity extends AppCompatActivity implements Animator.Anima
 //        pointTextview.setText(String.valueOf(userPoint));
 
 
-        present.add("최신형컴퓨터");
-        present.add("예쁜어항");
-        present.add("최신형스마트폰");
-        present.add("예쁜시계");
-        present.add("건담");
-        present.add("프라모델");
-        present.add("큰 물총");
-        present.add("신발");
-        present.add("과자");
-        present.add("당근");
-        present.add("배");
+        present.add("'ㄴ'훈장 (일반등급)");
+        present.add("'ㄱ'훈장 (일반등급)");
+        present.add("'ㄷ'훈장 (일반등급)");
+        present.add("'ㄹ'훈장 (일반등급)");
+        present.add("'ㅁ'훈장 (일반등급)");
+        present.add("'ㅂ'훈장 (일반등급)");
+        present.add("'ㅅ'훈장 (일반등급)");
+        present.add("'ㅇ'훈장 (일반등급)");
+        present.add("'ㅈ'훈장 (일반등급)");
+        present.add("'ㅊ'훈장 (일반등급)");
+        present.add("'ㅋ'훈장 (일반등급)");
+        present.add("'ㅌ'훈장 (일반등급)");
+        present.add("'ㅍ'훈장 (일반등급)");
+        present.add("'ㅎ'훈장 (일반등급)");
+        present.add("'ㄲ'훈장 (전설등급)");
+        present.add("'ㄸ'훈장 (전설등급)");
+        present.add("'ㅒ'훈장 (전설등급)");
+        present.add("'ㅖ'훈장 (전설등급)");
+        present.add("'ㅉ'훈장 (전설등급)");
+
 
 
         //잘했을 때 멘트

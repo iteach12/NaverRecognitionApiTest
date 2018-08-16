@@ -3,12 +3,18 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,22 +26,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.login.LoginManager;
+import android.Manifest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ValueEventListener{
+
+
+    //perrmission
+    private static final int RECORD_REQUEST_CODE = 101;
+    private static String TAG = "Permission_Record";
+
+
+
+
 
     final int ITEM_SIZE = 10;
     Toolbar toolbar;
@@ -82,6 +94,21 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission to record denied");
+            makeRequest();
+        }
+
+
+
+
+
         initView();
         //파이어베이스 사용자 관련해서 사용하기 위해 만들어주는것.
         auth = FirebaseAuth.getInstance();
@@ -115,6 +142,10 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+
+
+
             }
         });
 
@@ -138,41 +169,66 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView = (RecyclerView) findViewById(R.id.recycleView);
+//        layoutManager = new LinearLayoutManager(getApplicationContext());
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//
+//
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(layoutManager);
+//
+//
+//
+//        List<Item> items = new ArrayList<>();
+//        Item[] item = new Item[ITEM_SIZE];
+//        item[0] = new Item("발음연습", "쉽고 즐겁게 발음을 연습해 보세요", "moum", 1);
+//        item[1] = new Item("순위보기", "나의 순위를 확인하세요.", "moum", 2);
+//        item[2] = new Item("가방열기", "나의 학습 상황을 점검해 보세요.", "moum", 3);
+//        item[3] = new Item("오늘의 문제", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 4);
+//        item[4] = new Item("설정하기", "연습문제를 풀어서 실력을 늘려봅시다.",  "moum", 5);
+//        item[5] = new Item("연습문제2", "연습문제를 풀어서 실력을 늘려봅시다.",  "moum", 6);
+//        item[6] = new Item("연습문제3", "실력을 늘려봅시다.",  "moum", 7);
+//        item[7] = new Item("연습문제4", "굿굿굿이예요 굿굿굿",  "moum", 8);
+//        item[8] = new Item("연습문제5", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 9);
+//        item[9] = new Item("연습문제6", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 10);
+//
+//
+//        for (int i = 0; i < ITEM_SIZE; i++) {
+//            items.add(item[i]);
+//        }
+//
+//        recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
+//        recyclerView.addItemDecoration(new RecyclerViewDecoration(40));
 
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
 
 
 
-        List<Item> items = new ArrayList<>();
-        Item[] item = new Item[ITEM_SIZE];
-        item[0] = new Item("발음연습", "쉽고 즐겁게 발음을 연습해 보세요", "moum", 1);
-        item[1] = new Item("순위보기", "나의 순위를 확인하세요.", "moum", 2);
-        item[2] = new Item("가방열기", "나의 학습 상황을 점검해 보세요.", "moum", 3);
-        item[3] = new Item("오늘의 문제", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 4);
-        item[4] = new Item("설정하기", "연습문제를 풀어서 실력을 늘려봅시다.",  "moum", 5);
-        item[5] = new Item("연습문제2", "연습문제를 풀어서 실력을 늘려봅시다.",  "moum", 6);
-        item[6] = new Item("연습문제3", "실력을 늘려봅시다.",  "moum", 7);
-        item[7] = new Item("연습문제4", "굿굿굿이예요 굿굿굿",  "moum", 8);
-        item[8] = new Item("연습문제5", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 9);
-        item[9] = new Item("연습문제6", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 10);
+    }
+
+    //런타임 퍼미션 요청결과
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
 
-        for (int i = 0; i < ITEM_SIZE; i++) {
-            items.add(item[i]);
+        switch(requestCode){
+            case RECORD_REQUEST_CODE:{
+                if(grantResults.length==0 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Log.i(TAG, "Permission has been denied by user");
+
+                }else{
+
+                    Log.i(TAG, "Permission has been granted by user");
+
+                }
+            }
         }
+    }
 
-        recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
-        recyclerView.addItemDecoration(new RecyclerViewDecoration(40));
-
-
-
-
-
+    //런타임 퍼미션 요청하기
+    protected void makeRequest(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                RECORD_REQUEST_CODE);
     }
 
     @Override
@@ -201,6 +257,33 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("개인정보처리방침").
+                    setMessage("개인정보처리방침을 확인하시려면 아래의 접속버튼을 눌러 주시기 바랍니다").
+
+                    setPositiveButton("접속", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            String url = "https://goo.gl/W2fhkF";
+                            Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(internetIntent);
+
+
+
+                        }
+                    }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+
             return true;
         }
 
@@ -301,7 +384,7 @@ public class MainActivity extends AppCompatActivity
 
 
             header_userID.setText("이름 : "+myStatusDTO1.userName);
-            header_userLevel.setText("등급 : "+myStatusDTO1.userLevel);
+            header_userLevel.setText("점수 : "+myStatusDTO1.userLevel);
 
 
 
@@ -361,7 +444,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
+
 //        dialog.dismiss();
 
     }

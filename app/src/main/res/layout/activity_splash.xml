@@ -44,9 +44,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="바른발음"
+            android:text="문해력 쑥쑥! 자신감 으쓱!"
             android:textColor="#FFFFFF"
-            android:textSize="40dp" />
+            android:textSize="30dp" />
 
         <TextView
             android:layout_width="wrap_content"

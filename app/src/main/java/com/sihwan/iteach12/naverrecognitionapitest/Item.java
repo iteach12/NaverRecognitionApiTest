@@ -6,10 +6,10 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 
 public class Item {
 
-    String title;
-    String subTitle;
-    String child;
-    int difficult;
+    public String title;
+    public String subTitle;
+    public String child;
+    public int difficult;
 
 
     String getTitle() {

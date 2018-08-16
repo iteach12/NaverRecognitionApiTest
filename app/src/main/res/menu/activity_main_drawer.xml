@@ -3,14 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/today"
+            android:icon="@android:drawable/ic_partial_secure"
+            android:title="오늘의문제" />
         <item
             android:id="@+id/prac_moum"
-            android:icon="@android:drawable/ic_secure"
+            android:icon="@android:drawable/ic_partial_secure"
             android:title="모음연습" />
         <item
             android:id="@+id/prac_jaum"
-            android:icon="@android:drawable/ic_partial_secure"
+            android:icon="@android:drawable/ic_secure"
             android:title="자음연습" />
         <item
             android:id="@+id/easy_word"
@@ -28,10 +33,6 @@
             android:id="@+id/sokdam"
             android:icon="@android:drawable/ic_secure"
             android:title="속담연습" />
-        <item
-            android:id="@+id/today"
-            android:icon="@android:drawable/ic_partial_secure"
-            android:title="오늘의문제" />
         <item
             android:id="@+id/prac_myProblem"
             android:icon="@android:drawable/ic_secure"

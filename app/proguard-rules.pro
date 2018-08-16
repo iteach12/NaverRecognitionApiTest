@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+
 -keep class com.naver.speech.clientapi.SpeechRecognizer {
         protected private *;
 }
+

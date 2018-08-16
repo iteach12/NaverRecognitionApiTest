@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">바른발음</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">문해력 쑥쑥! 자신감 으쓱!</string>
+    <string name="action_settings">개인정보처리방침</string>
     <string name="str_start">음성인식 시작</string>
     <string name="str_stop">음성인식 종료</string>
 
@@ -17,7 +17,7 @@
     <string name="main_btn_myinfo_string">강의실</string>
     <string name="main_btn_rangking_string">랭킹확인</string>
     <string name="main_btn_study_string">학습하기</string>
-    <string name="title_activity_login">문해력</string>
+    <string name="title_activity_login">문해력 쑥쑥! 자신감 으쓱!</string>
     <string name="title_activity_home">home in</string>
 
 
@@ -47,7 +47,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">설정</string>
     <string name="title_activity_result2">축하합니다</string>
-    <string name="title_activity_main">바른발음</string>
+    <string name="title_activity_main">문해력 쑥쑥! 자신감 으쓱!</string>
     <string name="title_activity_scrolling">모음연습</string>
     <string name="title_activity_jaum_practice">자음연습</string>
     <string name="title_activity_jaum">자음연습</string>
