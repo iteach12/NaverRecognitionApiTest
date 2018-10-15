@@ -36,19 +36,16 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Coming Soon..."
-            android:textSize="40sp"
-            android:textColor="#FFFFFF"/>
-        <TextView
+            android:src="@drawable/banner_1"
+            />
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="2019. 03."
-            android:textSize="15sp"
-            android:textColor="#FFFFFF"/>
+            android:src="@drawable/banner_2"
+            />
 
     </LinearLayout>
 
