@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#3a99d8"
-    tools:context="com.sihwan.iteach12.naverrecognitionapitest.MyDataActivity">
+    tools:context="com.sihwan.iteach12.naverrecognitionapitest.MainActionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -54,7 +54,7 @@
         />
 
 
-    <android.support.v4.view.ViewPager
+    <com.sihwan.iteach12.naverrecognitionapitest.CustomViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

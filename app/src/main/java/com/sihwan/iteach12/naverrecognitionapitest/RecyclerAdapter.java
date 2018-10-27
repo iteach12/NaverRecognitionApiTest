@@ -4,7 +4,6 @@ package com.sihwan.iteach12.naverrecognitionapitest;
  * Created by iteach12 on 2018. 4. card_back3..
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -52,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(View v) {
 
         //여기서 문제풀이로 이동할
-        Intent myIntent = new Intent(context, MyDataActivity.class);
+        Intent myIntent = new Intent(context, MainActionActivity.class);
 
         //
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

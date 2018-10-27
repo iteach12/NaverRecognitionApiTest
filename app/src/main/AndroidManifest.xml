@@ -56,7 +56,7 @@
             android:name=".DatabaseManageActivity"
             android:label="@string/title_activity_my_data" />
         <activity
-            android:name=".MyDataActivity"
+            android:name=".MainActionActivity"
             android:label="@string/title_activity_my_data"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

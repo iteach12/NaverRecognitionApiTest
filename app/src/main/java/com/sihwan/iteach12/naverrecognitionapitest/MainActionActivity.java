@@ -1,7 +1,9 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +15,7 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,10 +25,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,7 +57,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class MyDataActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ViewPager.OnPageChangeListener{
+import static android.support.v4.view.MotionEventCompat.getActionMasked;
+
+public class MainActionActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ViewPager.OnPageChangeListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -67,9 +74,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
 
     private ViewPagerIndicator viewPagerIndicator;
+
+
 
     private static FirebaseAuth auth;
 
@@ -108,6 +117,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     //현재 에너지(승급전, 달인문제)
     int currentEnergy;
 
+    //현재 풀 문제의 개수
+    final private int problem_count = 5;
+
     //shinebutton 에너지 관련 (이거 굳이 안써도 되는데, lottie로 통일시키기)
     ShineButton shineButton1;
     ShineButton shineButton2;
@@ -119,7 +131,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-    private static final String TAG = MyDataActivity.class.getSimpleName();
+    private static final String TAG = MainActionActivity.class.getSimpleName();
     //    private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
     //    v1 기존 아이디입니다
 
@@ -128,7 +140,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     private static final String CLIENT_ID = "q8pyzxbayz";
 
 
-    private MyDataActivity.RecognitionHandler handler;
+    private MainActionActivity.RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
     private static String mResult;
     private AudioWriterPCM writer;
@@ -176,7 +188,10 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 if(!lottieRecoding.isAnimating()){
                     lottieRecoding.setVisibility(View.VISIBLE);
                     lottieRecoding.playAnimation();
+                    mViewPager.setPagingEnabled(false);
+
                 }
+
 
 
                 writer.write((short[]) msg.obj);
@@ -195,6 +210,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.finalResult:
 
                 //최종결과 나오면 애니메이션끝내기
+                mViewPager.setPagingEnabled(true);
                 lottieRecoding.setVisibility(View.INVISIBLE);
                 lottieRecoding.pauseAnimation();
 
@@ -262,14 +278,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             if(currentProgress>=myProblemDTOS.size()){
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(MyDataActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActionActivity.this);
                 builder.setMessage("모든 문제를 풀었습니다").
                         setTitle("완료");
                 builder.setPositiveButton("결과보기", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
+                        Intent intent = new Intent(MainActionActivity.this, Result2Activity.class);
 
 
 
@@ -308,15 +324,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         if(answer){
 
-
-
-
             lottieCorrect.playAnimation();
 
-
-
-
-//            Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
 
             //이 문제를 풀었으면 점수를 다시 주지 않도록 설정
             if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
@@ -342,9 +351,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
                 //진행상황넣기
-
-
-
                 Log.i("CheckAnswer", ""+currentProblemIndex);
 
 
@@ -381,14 +387,14 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                         shineButton1.setChecked(false,true);
 
 
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MyDataActivity.this);
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActionActivity.this);
                         builder2.setMessage("실패").
                                 setTitle("에너지가 바닥났습니다.");
                         builder2.setPositiveButton("결과보기", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                Intent intent = new Intent(MyDataActivity.this, Result2Activity.class);
+                                Intent intent = new Intent(MainActionActivity.this, Result2Activity.class);
 
                                 intent.putExtra("userPoint", currentPoint);
                                 intent.putExtra("result", resultJudge(currentPoint));
@@ -483,7 +489,11 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         //인텐트 넘어온것. 문제 뽑아올것 정하기 child로 구분됨.
         Intent intent = getIntent();
+
+        //문제의 종류 차일드로 저장해 놨음.
         problem_choice1 = intent.getExtras().getString("problem_choice1");
+
+        //난이도
         problem_diffi = intent.getExtras().getInt("difficult");
 
 
@@ -562,7 +572,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-        handler = new RecognitionHandler(MyDataActivity.this);
+        handler = new RecognitionHandler(MainActionActivity.this);
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
 
 
@@ -712,6 +722,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
     //ㅋㅋ 문제 뽑아오기. 랜덤 넣기 가능함.
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -726,7 +737,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
             //이번 문제들을 리스트에 저장해 둠 여기서 문제당 점수 텍스트 등등 뽑아쓰자
 
 
-            if(problem_diffi<6){
+            if(problem_diffi!=100){
                 if(myProblemDTO.problemLevel == problem_diffi){
                     myProblemDTOS.add(myProblemDTO);
                     randomDTOS.add(myProblemDTO);
@@ -742,6 +753,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
+        // 여기 문제 개수는 바꿔주자. 10개는 너무 많아.
+        // 아니면 승급전이나 달인 문제 때는 10개 그 외에는 5개 정도?? 아니면 난이도에 따라서 문제 개수 바꾸기
         if(myProblemDTOS.size()>10){
 
             //문제가 개수가 10개를 넘으면 myProblemDTOS를 클리어 시킨다. 싹 지워주고 랜덤으로 10개를 넣어줄거야
@@ -761,11 +774,12 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         //데이터베이스를 불러온 다음에 화면을 띄워줄라고....
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-                // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager with the sections adapter.
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (CustomViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
+
 
 
         viewPagerIndicator = (ViewPagerIndicator)findViewById(R.id.view_pager_indicator);
@@ -811,14 +825,27 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         currentProblemIndex = position;
         Log.i("position", ""+position);
 
+//        //페이지가 변경 되었을 때 음성인식 중지하기
+//        naverRecognizer.getSpeechRecognizer().stop();
+//
+//        //페이지가 변경 되었을 때 애니메이션 지우기
+//        lottieRecoding.setVisibility(View.INVISIBLE);
+//        lottieRecoding.pauseAnimation();
+
 
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         Log.i("ViewPagerChange", "onPageStateChanged"+state);
+
+
+
+
     }
     //뷰페이저 온 페이지 체인지 리스너
+
+
 
 
 
@@ -854,6 +881,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
             return fragment;
         }
+
+
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -910,6 +940,8 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
+
+
     }
 
     /**
@@ -958,20 +990,21 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
+
     }
 
 
 
     static class RecognitionHandler extends Handler {
-        private final WeakReference<MyDataActivity> mActivity;
+        private final WeakReference<MainActionActivity> mActivity;
 
-        RecognitionHandler(MyDataActivity activity) {
+        RecognitionHandler(MainActionActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MyDataActivity activity = mActivity.get();
+            MainActionActivity activity = mActivity.get();
             if (activity != null) {
                 activity.handleMessage(msg);
             }
@@ -989,6 +1022,9 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
         return contentValues;
     }
     //////////////////음성 합성 관련 /////////////////////
+
+
+
 
 
 }
