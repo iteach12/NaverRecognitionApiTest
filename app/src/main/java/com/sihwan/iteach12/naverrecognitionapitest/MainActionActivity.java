@@ -825,13 +825,19 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         currentProblemIndex = position;
         Log.i("position", ""+position);
 
-//        //페이지가 변경 되었을 때 음성인식 중지하기
-//        naverRecognizer.getSpeechRecognizer().stop();
-//
-//        //페이지가 변경 되었을 때 애니메이션 지우기
-//        lottieRecoding.setVisibility(View.INVISIBLE);
-//        lottieRecoding.pauseAnimation();
 
+        // 만약 이 문제를 풀었던 문제라면? 음성인식 시작하지 않음.
+        if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
+
+            if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
+                // Start button is pushed when SpeechRecognizer's state is inactive.
+                // Run SpeechRecongizer by calling recognize().
+                mResult = "";
+
+                naverRecognizer.recognize();
+            }
+
+        }
 
     }
 
@@ -839,10 +845,9 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
     public void onPageScrollStateChanged(int state) {
         Log.i("ViewPagerChange", "onPageStateChanged"+state);
 
-
-
-
     }
+
+
     //뷰페이저 온 페이지 체인지 리스너
 
 
