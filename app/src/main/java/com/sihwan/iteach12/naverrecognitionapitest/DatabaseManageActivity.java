@@ -15,10 +15,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+
+/**
+ * Refactoring by iteach on 2018-10-27 1711
+ */
+
 public class DatabaseManageActivity extends AppCompatActivity {
 
+
+
+    //유저 아이디
     private String userId;
+
+
+    //파이어베이스 인증
     private FirebaseAuth auth;
+    //파이어베이스 데이터베이스 레퍼런스
     private DatabaseReference database;
 
 
@@ -29,14 +41,17 @@ public class DatabaseManageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_database_manage);
 
 
+        //파이어베이스 init
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference();
+
+        //유저 아이디는 이메일을 구해서 스트링으로.
         userId = auth.getCurrentUser().getEmail().toString();
 
 
         final DBHelper dbHelper = new DBHelper(getApplicationContext(), "Problem.db", null, 1);
 
-// 테이블에 있는 모든 데이터 출력
+        // 테이블에 있는 모든 데이터 출력
         final TextView result = (TextView) findViewById(R.id.result);
 
         final TextView create_who = (TextView) findViewById(R.id.create_who);
@@ -48,7 +63,8 @@ public class DatabaseManageActivity extends AppCompatActivity {
 
 
 
-// DB에 데이터 추가
+        // DB에 데이터 추가
+        // 미사용
         Button insert = (Button) findViewById(R.id.insert);
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +78,8 @@ public class DatabaseManageActivity extends AppCompatActivity {
             }
         });
 
-// DB에 있는 데이터 수정
+        // DB에 있는 데이터 수정
+        // 미사용
         Button update = (Button) findViewById(R.id.update);
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +92,9 @@ public class DatabaseManageActivity extends AppCompatActivity {
             }
         });
 
-// DB에 있는 데이터 삭제
+
+        // DB에 있는 데이터 삭제
+        // 미사용
         Button delete = (Button) findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,20 +106,24 @@ public class DatabaseManageActivity extends AppCompatActivity {
             }
         });
 
-// DB에 있는 데이터 조회
+
+        // DB에 있는 데이터 조회 (원래는)
+        // 파이어 베이스 문제 입력하기 (지금은)
         Button select = (Button) findViewById(R.id.select);
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                result.setText(dbHelper.getResult());
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(DatabaseManageActivity.this);
-//                builder.setTitle("문제뽑은거");
-//                builder.setMessage(dbHelper.getResult());
-//                builder.setPositiveButton("확인", null);
-//                builder.create().show();
+                /* 기존코드
+                result.setText(dbHelper.getResult());
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(DatabaseManageActivity.this);
+                builder.setTitle("문제뽑은거");
+                builder.setMessage(dbHelper.getResult());
+                builder.setPositiveButton("확인", null);
+                builder.create().show();
+                */
 
+                //
                 MyProblemDTO myProblemDTO = new MyProblemDTO();
                 myProblemDTO.problemText = etItem.getText().toString();
                 myProblemDTO.problemLevel = Integer.parseInt(etPrice.getText().toString());
@@ -108,17 +131,8 @@ public class DatabaseManageActivity extends AppCompatActivity {
                 myProblemDTO.problemSolve = false;
                 myProblemDTO.problemCorrectAnswer = false;
 
-
-
-
-
+                //push는 기존의 것을 그대로 둔 채 끼워 넣는 것???
                 database.child("problem").child(etChild.getText().toString()).push().setValue(myProblemDTO);
-
-
-                //Firebase database 업로드 테스트용. 일단은 성공함.
-
-
-
 
             }
         });

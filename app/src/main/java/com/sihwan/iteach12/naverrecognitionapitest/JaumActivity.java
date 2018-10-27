@@ -107,6 +107,7 @@ public class JaumActivity extends AppCompatActivity implements ValueEventListene
                         .setAction("Action", null).show();
             }
         });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

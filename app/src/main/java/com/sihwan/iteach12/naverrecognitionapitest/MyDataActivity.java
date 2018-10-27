@@ -75,6 +75,7 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
     private DatabaseReference database;
 
+
     Query myProblemQuery;
 
 
@@ -98,16 +99,20 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     String sfName = "UserID";
 
 
+    //현재 점수
     int currentPoint;
+
+    //현재 푼 문제 개수 (문제 총 개수와 같아지면 결과 페이지로 가기)
     int currentProgress;
+
+    //현재 에너지(승급전, 달인문제)
     int currentEnergy;
 
-
-
-    //shinebutton에너지 관련
+    //shinebutton 에너지 관련 (이거 굳이 안써도 되는데, lottie로 통일시키기)
     ShineButton shineButton1;
     ShineButton shineButton2;
     ShineButton shineButton3;
+
 
     //현재 상태
     TextView nowStatus;
@@ -115,26 +120,25 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private static final String TAG = MyDataActivity.class.getSimpleName();
-//    private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
-//    v1 기존 아이디입니다
+    //    private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
+    //    v1 기존 아이디입니다
 
 
     //  v2 새로운 아이디 입니다
     private static final String CLIENT_ID = "q8pyzxbayz";
 
 
-    // 1. "내 애플리케이션"에서 Client ID를 확인해서 이곳에 적어주세요.
-    // 2. build.gradle (Module:app)에서 패키지명을 실제 개발자센터 애플리케이션 설정의 '안드로이드 앱 패키지 이름'으로 바꿔 주세요
-
     private MyDataActivity.RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
     private static String mResult;
     private AudioWriterPCM writer;
+
     //음성합성 관련
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
     static String url = "http://lovepusa.cafe24.com/naverapi_v2.php";
+
     //contentValues관련 변수들
     String user_name = "iteach12";
     static String user_text;
@@ -152,9 +156,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
     LottieAnimationView lottieCorrect;
     LottieAnimationView lottieRecoding;
 
-    //데이터베이스 불러오자.
-
-
 
     private void handleMessage(Message msg) {
         switch (msg.what) {
@@ -164,7 +165,6 @@ public class MyDataActivity extends AppCompatActivity implements View.OnClickLis
                 writer = new AudioWriterPCM(
                         Environment.getExternalStorageDirectory().getAbsolutePath() + "/NaverSpeechTest");
                 writer.open("Test");
-
                 STT_btn.setEnabled(true);
                 STT_btn.setClickable(true);
 

@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity
     private static String TAG = "Permission_Record";
 
 
+    //메인 메뉴 아이템 개수
+    final int MAIN_ITEM_SIZE = 4;
 
-
-
-    final int ITEM_SIZE = 10;
+    //기본 생성
     Toolbar toolbar;
     FloatingActionButton fab;
     DrawerLayout drawer;
@@ -62,17 +62,13 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
 
-
     //드로어블 관련 뷰
     TextView header_userID;
     TextView header_userLevel;
 
-
     //파이어베이스
     private FirebaseAuth auth;
     private DatabaseReference database;
-
-
 
     //아이디 저장용 SharedPreferrence
     String userID;
@@ -81,15 +77,12 @@ public class MainActivity extends AppCompatActivity
     int userLevel;
 
     //내 정보 저장용. 얘를 옮겨다닐거야. 액티비티 별로
-
     MyStatusDTO myStatusDTO1;
 
 
     //다이얼로그
     AlertDialog.Builder builder;
     AlertDialog dialog;
-
-
 
 
     @Override
@@ -109,16 +102,16 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
-
-
+        //기본 초기화 과정
         initView();
+
         //파이어베이스 사용자 관련해서 사용하기 위해 만들어주는것.
         auth = FirebaseAuth.getInstance();
 
         //파이어베이스 데이터베이스
         database = FirebaseDatabase.getInstance().getReference();
 
+        //저장된 아이디 불러오기. 없으면 기본값은 공란
         SharedPreferences sf = getSharedPreferences(sfName, 0);
 
         userID = sf.getString("userID", "");
@@ -129,9 +122,6 @@ public class MainActivity extends AppCompatActivity
         database.child("userProfile").child(userID).addValueEventListener(this);
 
 
-
-
-
     }
 
     private void initView() {
@@ -140,17 +130,15 @@ public class MainActivity extends AppCompatActivity
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-
-
-
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//
+//
+//            }
+//        });
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -183,20 +171,13 @@ public class MainActivity extends AppCompatActivity
 //
 //
 //        List<Item> items = new ArrayList<>();
-//        Item[] item = new Item[ITEM_SIZE];
-//        item[0] = new Item("발음연습", "쉽고 즐겁게 발음을 연습해 보세요", "moum", 1);
-//        item[1] = new Item("순위보기", "나의 순위를 확인하세요.", "moum", 2);
-//        item[2] = new Item("가방열기", "나의 학습 상황을 점검해 보세요.", "moum", 3);
-//        item[3] = new Item("오늘의 문제", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 4);
-//        item[4] = new Item("설정하기", "연습문제를 풀어서 실력을 늘려봅시다.",  "moum", 5);
-//        item[5] = new Item("연습문제2", "연습문제를 풀어서 실력을 늘려봅시다.",  "moum", 6);
-//        item[6] = new Item("연습문제3", "실력을 늘려봅시다.",  "moum", 7);
-//        item[7] = new Item("연습문제4", "굿굿굿이예요 굿굿굿",  "moum", 8);
-//        item[8] = new Item("연습문제5", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 9);
-//        item[9] = new Item("연습문제6", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 10);
+//        Item[] item = new Item[MAIN_ITEM_SIZE];
+//        item[0] = new Item("오늘의 문제", "쉽고 즐겁게 발음을 연습해 보세요", "moum", 1);
+//        item[1] = new Item("기본 모음 연습", "나의 순위를 확인하세요.", "moum", 2);
+//        item[2] = new Item("기본 자음 연습", "나의 학습 상황을 점검해 보세요.", "moum", 3);
+//        item[3] = new Item("내 정보", "친구들과 함께 오락을 즐기면서 연습해 보세요.",  "moum", 4);
 //
-//
-//        for (int i = 0; i < ITEM_SIZE; i++) {
+//        for (int i = 0; i < MAIN_ITEM_SIZE; i++) {
 //            items.add(item[i]);
 //        }
 //

@@ -38,22 +38,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         final Item item = items.get(position);
-//        Drawable drawable = ContextCompat.getDrawable(context, item.getImage());
-//        Glide.with(context).load(item.getImage()).into(holder.image);
-//        holder.image.setImageDrawable(drawable);
+
+//      Drawable drawable = ContextCompat.getDrawable(context, item.getImage());
+//      Glide.with(context).load(item.getImage()).into(holder.image);
+//      holder.image.setImageDrawable(drawable);
+
         holder.title.setText(item.getTitle());
         holder.subTitle.setText(item.getSubTitle());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //여기서 문제풀이로 이동할거야.
-                Intent myIntent = new Intent(context, MyDataActivity.class);
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                myIntent.putExtra("problem_choice1", item.getChild1());
-                myIntent.putExtra("difficult", item.getDifficult());
-                context.startActivity(myIntent);
+        //여기서 문제풀이로 이동할
+        Intent myIntent = new Intent(context, MyDataActivity.class);
+
+        //
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        myIntent.putExtra("problem_choice1", item.getChild1());
+        myIntent.putExtra("difficult", item.getDifficult());
+
+        context.startActivity(myIntent);
 
 
             }

@@ -1,8 +1,5 @@
 package com.sihwan.iteach12.naverrecognitionapitest;
 
-/**
- * Created by iteach12 on 2018. 3. 25..
- */
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
