@@ -3,7 +3,6 @@ package com.sihwan.iteach12.naverrecognitionapitest;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +14,6 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,12 +23,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -56,8 +52,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import static android.support.v4.view.MotionEventCompat.getActionMasked;
 
 public class MainActionActivity extends AppCompatActivity implements View.OnClickListener, ValueEventListener, ViewPager.OnPageChangeListener{
 
@@ -119,6 +113,11 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
     //현재 풀 문제의 개수
     final private int problem_count = 5;
+
+    //사운드 관련
+    private MediaPlayer correctSound; //정답일 때
+    private MediaPlayer wrongSound; //오답일 때
+
 
     //shinebutton 에너지 관련 (이거 굳이 안써도 되는데, lottie로 통일시키기)
     ShineButton shineButton1;
@@ -324,7 +323,18 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
         if(answer){
 
+            // 정답 애니메이션 시작
             lottieCorrect.playAnimation();
+
+            // 정답 사운드 시작
+            if(correctSound != null){
+                correctIsPlaying();
+            }else{
+                correctSound = MediaPlayer.create(this, R.raw.correct);
+                correctIsPlaying();
+            }
+
+
 
 
             //이 문제를 풀었으면 점수를 다시 주지 않도록 설정
@@ -365,6 +375,16 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
 
         }else{
+
+                //오답 사운드 시작
+                if(wrongSound != null){
+                    wrongIsPlaying();
+                }else{
+                    wrongSound = MediaPlayer.create(this, R.raw.wrong);
+                    wrongIsPlaying();
+                }
+
+
 
                 //문제 풀었다 표시
                 myProblemDTOS.get(currentProblemIndex).problemSolve = true;
@@ -440,6 +460,49 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
         }
 
+    }
+
+
+    //사운드 관련 메소드
+    private void correctIsPlaying(){
+
+        if(!correctSound.isPlaying()){
+            correctSound.start();
+        }else{
+            correctSound.stop();
+            correctSound.release();
+            correctSound = null;
+        }
+
+
+    }
+
+    private void wrongIsPlaying(){
+
+        if(!wrongSound.isPlaying()){
+            wrongSound.start();
+        }else{
+            wrongSound.stop();
+            wrongSound.release();
+            wrongSound = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(correctSound != null){
+            correctSound.release();
+            correctSound = null;
+
+        }
+
+        if(wrongSound != null){
+            wrongSound.release();
+            wrongSound = null;
+
+        }
     }
 
     protected int resultJudge(int point){
@@ -898,8 +961,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
             View rootView = inflater.inflate(R.layout.fragment_my_data, container, false);
 
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            TextView my_pronon = (TextView) rootView.findViewById(R.id.my_pronon_tv);
-
 
             user_text = myProblemDTOS.get(getArguments().getInt(ARG_SECTION_NUMBER)).problemText;
 
@@ -933,7 +994,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         }
 
 
-
         @Override
         public void onDestroyView() {
             super.onDestroyView();
@@ -941,11 +1001,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
             Log.d("onDestroyView", "onDestroyView(First)"+currentProblemIndex);
 
         }
-
-
-
-
-
 
     }
 
