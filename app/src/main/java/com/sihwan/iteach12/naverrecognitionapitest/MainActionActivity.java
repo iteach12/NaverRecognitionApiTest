@@ -158,6 +158,7 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
     //음성합성 관련
 
 
+
     //플로팅 액션 버튼
     FloatingActionButton TTS_btn;
     FloatingActionButton STT_btn;
@@ -639,11 +640,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
 
 
-
-
-
-
-
     }
 
 
@@ -684,6 +680,31 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         naverRecognizer.getSpeechRecognizer().release();
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("정말 종료하시겠습니까?").
+                setMessage("지금 종료 하면 진행상황이 모두 사라집니다.").
+                setPositiveButton("종료", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                }).setNegativeButton("계속하기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -728,47 +749,25 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.fab2:
 
-                url = "http://lovepusa.cafe24.com/naverapi.php";
 
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        mediaPlayer.stop();
+                        mediaPlayer.reset();
+                    }
+                });
 
+                try {
 
-                String mp3_name = auth.getCurrentUser().getEmail().split("@")[0];
-                String current_text = myProblemDTOS.get(currentProblemIndex).problemText;
-
-//                AsyncTask를 통해 HttpURLConnection 수행.
-                SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(mp3_name, current_text, user_voice, user_speed));
-                networkTask.execute();
-                Log.i("Result", setContentsValues(mp3_name, current_text, user_voice, user_speed).toString());
-
-
-
-                Snackbar.make(view, "발음듣기", Snackbar.LENGTH_SHORT)
-                        .setAction("시작", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                MediaPlayer mediaPlayer = new MediaPlayer();
-                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                    @Override
-                                    public void onCompletion(MediaPlayer mediaPlayer) {
-                                        mediaPlayer.stop();
-                                        mediaPlayer.reset();
-                                    }
-                                });
-
-                                try {
-
-                                    String mp3_name = auth.getCurrentUser().getEmail().split("@")[0];
-                                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+mp3_name+".mp3");
-                                    mediaPlayer.prepare();
-                                    mediaPlayer.start();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }).show();
-
+                    String mp3_name = auth.getCurrentUser().getEmail().split("@")[0];
+                    mediaPlayer.setDataSource("http://lovepusa.cafe24.com/"+mp3_name+".mp3");
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
 
@@ -865,6 +864,9 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         currentPoint=0;
         currentProgress =0;
 
+        //최초의 mp3 만들어두기
+        makeMp3Sysn();
+
     }
 
     @Override
@@ -889,6 +891,7 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         Log.i("position", ""+position);
 
 
+        // 음성 인식 시작
         // 만약 이 문제를 풀었던 문제라면? 음성인식 시작하지 않음.
         if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
 
@@ -901,6 +904,10 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
             }
 
         }
+
+        //화면 바뀌면 알맞게 mp3만들기
+        makeMp3Sysn();
+
 
     }
 
@@ -1080,6 +1087,21 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         contentValues.put("voice", voice);
         contentValues.put("speed", speed);
         return contentValues;
+    }
+
+    private void makeMp3Sysn(){
+
+
+
+        String mp3_name = auth.getCurrentUser().getEmail().split("@")[0];
+        String current_text = myProblemDTOS.get(currentProblemIndex).problemText;
+
+        // AsyncTask를 통해 HttpURLConnection 수행.
+        SynsAsyncTask networkTask = new SynsAsyncTask(url, setContentsValues(mp3_name, current_text, user_voice, user_speed));
+        networkTask.execute();
+        Log.i("Result", setContentsValues(mp3_name, current_text, user_voice, user_speed).toString());
+
+
     }
     //////////////////음성 합성 관련 /////////////////////
 
