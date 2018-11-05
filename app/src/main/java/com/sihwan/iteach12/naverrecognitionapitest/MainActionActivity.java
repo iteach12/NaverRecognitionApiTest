@@ -867,6 +867,8 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         //최초의 mp3 만들어두기
         makeMp3Sysn();
 
+        //push test git 윈도우와 연동중
+
     }
 
     @Override
