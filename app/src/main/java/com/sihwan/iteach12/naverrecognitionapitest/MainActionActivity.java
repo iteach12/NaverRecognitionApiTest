@@ -125,6 +125,8 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
     //현재 상태
     TextView nowStatus;
 
+
+
     private static final String TAG = MainActionActivity.class.getSimpleName();
     //    private static final String CLIENT_ID = "MTaabvfKipKDh2clp5Xl";
     //    v1 기존 아이디입니다
