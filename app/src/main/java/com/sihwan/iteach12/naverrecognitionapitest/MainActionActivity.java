@@ -91,9 +91,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
     private static ArrayList<MyProblemDTO> randomDTOS;
     private static ArrayList<String> wrongProblem;
     private static String wrong_text;
-
-
-
     private static ArrayList<String> problem_key_list;
     private static int currentProblemIndex;
 
@@ -119,7 +116,7 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
     private MediaPlayer wrongSound; //오답일 때
 
 
-    //shinebutton 에너지 관련 (이거 굳이 안써도 되는데, lottie로 통일시키기)
+    //shinebutton 에너지 관련 (이거 굳이 안써도 되는데, lottie로 통일시키기?)
     ShineButton shineButton1;
     ShineButton shineButton2;
     ShineButton shineButton3;
