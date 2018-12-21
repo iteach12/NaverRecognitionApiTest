@@ -164,6 +164,7 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
     //로티에 애니메이션 뷰
     LottieAnimationView lottieCorrect;
     LottieAnimationView lottieRecoding;
+    LottieAnimationView fireworks1;
 
 
     private void handleMessage(Message msg) {
@@ -188,20 +189,16 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                     mViewPager.setPagingEnabled(false);
 
                 }
-
-
-
                 writer.write((short[]) msg.obj);
                 STT_btn.setEnabled(false);
+                TTS_btn.setEnabled(false);
                 STT_btn.setClickable(false);
-
-
+                TTS_btn.setClickable(false);
                 break;
 
             case R.id.partialResult:
                 // Extract obj property typed with String.
                 mResult = (String) (msg.obj);
-
                 break;
 
             case R.id.finalResult:
@@ -235,11 +232,10 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                 }
                 mResult = strBuf.toString();
                 checkTheAnswer(finalAnswer);
-
                 STT_btn.setEnabled(true);
+                TTS_btn.setEnabled(true);
                 STT_btn.setClickable(true);
-
-
+                TTS_btn.setClickable(true);
                 break;
 
             case R.id.recognitionError:
@@ -257,7 +253,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                 if (writer != null) {
                     writer.close();
                 }
-
 //                btnStart.setText(R.string.str_start);
                 STT_btn.setEnabled(true);
                 break;
@@ -275,6 +270,7 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
             if(currentProgress>=myProblemDTOS.size()){
 
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActionActivity.this);
                 builder.setMessage("모든 문제를 풀었습니다").
                         setTitle("완료");
@@ -283,28 +279,17 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         Intent intent = new Intent(MainActionActivity.this, Result2Activity.class);
-
-
-
                         intent.putExtra("userPoint", currentPoint);
                         intent.putExtra("result", resultJudge(currentPoint));
-
                         intent.putStringArrayListExtra("wrong", wrongProblem);
-
-
 
                         Log.i("result_log", "현재 결과값 :"+String.valueOf(resultJudge(currentPoint)));
                         Log.i("result_log", "현재 점수 :"+String.valueOf(currentPoint));
 
-
                         startActivity(intent);
-
                         //끄기
                         naverRecognizer.getSpeechRecognizer().release();
-
                         finish();
-
-
                     }
                 });
 
@@ -317,13 +302,10 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
             }
         }
-
-
         if(answer){
 
             // 정답 애니메이션 시작
             lottieCorrect.playAnimation();
-
             // 정답 사운드 시작
             if(correctSound != null){
                 correctIsPlaying();
@@ -331,9 +313,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                 correctSound = MediaPlayer.create(this, R.raw.correct);
                 correctIsPlaying();
             }
-
-
-
 
             //이 문제를 풀었으면 점수를 다시 주지 않도록 설정
             if(!myProblemDTOS.get(currentProblemIndex).problemSolve){
@@ -348,15 +327,10 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
                 ///그래야 나중에 맞춘 문제를 알아낼 수 있으니깐??
                 problem_key_list.get(currentProblemIndex);
 
-
-
                 //점수넣기 & 서버 업로드하기
                 currentPoint += myProblemDTOS.get(currentProblemIndex).problemPoint;
 
-
-
                 //이렇게 데이터베이스에 하위 차일드를 지정해서 필요한 데이터만 올려줄 수도 있고만 기래.
-
 
                 //진행상황넣기
                 Log.i("CheckAnswer", ""+currentProblemIndex);
@@ -590,6 +564,10 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
         lottieRecoding = (LottieAnimationView)findViewById(R.id.recoding_lottie);
         lottieRecoding.setVisibility(View.INVISIBLE);
 
+        //끝났을 때 폭죽놀이 추가
+
+
+
 
 
 
@@ -629,7 +607,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
             }
         });
         lottieCorrect.setVisibility(View.INVISIBLE);
-
 
 
 
@@ -680,7 +657,6 @@ public class MainActionActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-
 
 
 
